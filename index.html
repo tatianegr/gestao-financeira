@@ -31,22 +31,32 @@
         Gestão Financeira Mensal
       </h1>
       <p class="text-gray-600 dark:text-gray-400 mb-4">
-        Escolha o mês/ano e controle receitas, despesas, saldo e histórico
+        Escolha o mês/ano e controle receitas, despesas, saldo e histórico de ações
       </p>
       <div class="mt-6 flex justify-center items-center space-x-4">
         <div class="relative">
-          <select id="yearSelect" class="appearance-none bg-white dark:bg-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+          <select id="yearSelect"
+                  class="appearance-none bg-white dark:bg-gray-700 dark:text-gray-100
+                         border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 pr-8
+                         focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2
+                      text-gray-700 dark:text-gray-300">
             <i class="fas fa-chevron-down"></i>
           </div>
         </div>
         <div class="relative">
-          <select id="monthSelect" class="appearance-none bg-white dark:bg-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+          <select id="monthSelect"
+                  class="appearance-none bg-white dark:bg-gray-700 dark:text-gray-100
+                         border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 pr-8
+                         focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2
+                      text-gray-700 dark:text-gray-300">
             <i class="fas fa-chevron-down"></i>
           </div>
         </div>
-        <button id="toggleHistory" class="bg-blue-500 dark:bg-blue-700 hover:bg-blue-600 dark:hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center transition">
+        <button id="toggleHistory"
+                class="bg-blue-500 dark:bg-blue-700 hover:bg-blue-600 dark:hover:bg-blue-600
+                       text-white px-4 py-2 rounded-lg flex items-center transition">
           <i class="fas fa-history mr-2"></i>Histórico
         </button>
       </div>
@@ -62,16 +72,19 @@
         <h3 class="text-gray-500 dark:text-gray-400 font-medium">Total a Pagar</h3>
         <p id="totalExpenses" class="text-3xl font-bold dark:text-white mt-2">R$ 0,00</p>
       </div>
-      <div id="balanceCard" class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border-l-4 border-blue-500">
+      <div id="balanceCard"
+           class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border-l-4 border-blue-500">
         <h3 class="text-gray-500 dark:text-gray-400 font-medium">Saldo Final</h3>
         <p id="finalBalance" class="text-3xl font-bold dark:text-white mt-2">R$ 0,00</p>
       </div>
     </div>
 
     <!-- Histórico Mensal -->
-    <div id="historySection" class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
+    <div id="historySection"
+         class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
       <h2 class="text-xl font-bold dark:text-gray-200 mb-4">Histórico Mensal</h2>
-      <input type="range" id="historySlider" min="0" max="0" value="0" class="w-full mb-4"/>
+      <input type="range" id="historySlider" min="0" max="0" value="0"
+             class="w-full mb-4"/>
       <div class="text-center">
         <p id="historyMonth" class="font-medium dark:text-gray-300 mb-2"></p>
         <p id="historyIncome" class="positive-value mb-1"></p>
@@ -89,7 +102,9 @@
       </div>
       <div class="p-6 bg-gray-50 dark:bg-gray-900">
         <div id="incomeItems" class="mb-6"></div>
-        <button id="addIncome" class="bg-green-500 dark:bg-green-700 hover:bg-green-600 dark:hover:bg-green-600 text-white px-6 py-2 rounded-lg flex items-center transition">
+        <button id="addIncome"
+                class="bg-green-500 dark:bg-green-700 hover:bg-green-600 dark:hover:bg-green-600
+                       text-white px-6 py-2 rounded-lg flex items-center transition">
           <i class="fas fa-plus mr-2"></i>Adicionar Receita
         </button>
       </div>
@@ -98,20 +113,23 @@
     <!-- Despesas -->
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-8">
       <div class="bg-red-600 dark:bg-red-700 px-6 py-4">
-        <h2 class="text-xl font-bold text-white flex items-center">
+        <h2 class="text-xl	font-bold text-white flex items-center">
           <i class="fas fa-receipt mr-3"></i>Despesas do Mês
         </h2>
       </div>
       <div class="p-6 bg-gray-50 dark:bg-gray-900">
         <div id="expenseItems" class="mb-6"></div>
-        <button id="addExpense" class="bg-red-500 dark:bg-red-700 hover:bg-red-600 dark:hover:bg-red-600 text-white px-6 py-2 rounded-lg flex items-center transition">
+        <button id="addExpense"
+                class="bg-red-500 dark:bg-red-700 hover:bg-red-600 dark:hover:bg-red-600
+                       text-white px-6 py-2 rounded-lg flex items-center transition">
           <i class="fas fa-plus mr-2"></i>Adicionar Despesa
         </button>
       </div>
     </div>
 
     <!-- Status de Pagamentos -->
-    <div id="paymentStatus" class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
+    <div id="paymentStatus"
+         class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
       <h2 class="text-xl font-bold dark:text-gray-200 mb-4">Status de Pagamentos</h2>
       <p class="font-medium dark:text-gray-200">
         Total Pago: <span id="totalPaid" class="positive-value">R$ 0,00</span>
@@ -128,22 +146,25 @@
     </div>
 
     <!-- Histórico de Ações -->
-    <div id="actionHistory" class="hidden bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
+    <div id="actionHistory"
+         class="hidden bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
       <h2 class="text-xl font-bold dark:text-gray-200 mb-4">Histórico de Ações</h2>
-      <ul id="actionList" class="list-disc list-inside text-sm text-gray-700 dark:text-gray-300 max-h-48 overflow-y-auto">
+      <ul id="actionList"
+          class="list-disc list-inside text-sm text-gray-700 dark:text-gray-300
+                 max-h-48 overflow-y-auto">
         <li>—</li>
       </ul>
     </div>
   </div>
 
-  <!-- 1) URL da sua API Google Apps Script -->
+  <!-- 1) URL da API Google Apps Script -->
   <script>
     const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzQ6Q6wJ8sMxgaX-i6fMhgd8KGL0qaEzlrLhHWE6QmAMQ7aK93esSivv18eagNDLQwa/exec';
   </script>
 
-  <!-- 2) Código JS principal já ajustado -->
   <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // referências de DOM
     const yearSelect    = document.getElementById('yearSelect');
     const monthSelect   = document.getElementById('monthSelect');
     const historySlider = document.getElementById('historySlider');
@@ -151,27 +172,30 @@
     const historyIncome = document.getElementById('historyIncome');
     const historyExpenses = document.getElementById('historyExpenses');
     const historyBalance  = document.getElementById('historyBalance');
-    const totalPaidEl     = document.getElementById('totalPaid');
-    const totalUnpaidEl   = document.getElementById('totalUnpaid');
-    const paidList        = document.getElementById('paidList');
-    const unpaidList      = document.getElementById('unpaidList');
-    const incomeItems     = document.getElementById('incomeItems');
-    const expenseItems    = document.getElementById('expenseItems');
-    const actionList      = document.getElementById('actionList');
-    const toggleBtn       = document.getElementById('toggleHistory');
-    const actionDiv       = document.getElementById('actionHistory');
+    const totalPaidEl   = document.getElementById('totalPaid');
+    const totalUnpaidEl = document.getElementById('totalUnpaid');
+    const paidList      = document.getElementById('paidList');
+    const unpaidList    = document.getElementById('unpaidList');
+    const incomeItems   = document.getElementById('incomeItems');
+    const expenseItems  = document.getElementById('expenseItems');
+    const actionList    = document.getElementById('actionList');
+    const toggleBtn     = document.getElementById('toggleHistory');
+    const actionDiv     = document.getElementById('actionHistory');
 
-    // toggle histórico
+    // alterna painel de histórico de ações
     toggleBtn.addEventListener('click', () => {
       actionDiv.classList.toggle('hidden');
       if (!actionDiv.classList.contains('hidden')) actionDiv.scrollIntoView({behavior:'smooth'});
     });
 
-    // monta períodos para slider e selects
+    // monta array de períodos maio/2025 → dezembro/2035
     const historyData = [];
-    { let dt = new Date(2025,4), end = new Date(2035,11);
-      while (dt <= end) {
-        historyData.push({ label: dt.toLocaleString('pt-BR',{month:'long',year:'numeric'}), income:0, expenses:0, balance:0 });
+    { let dt = new Date(2025,4), end=new Date(2035,11);
+      while (dt<=end) {
+        historyData.push({
+          label: dt.toLocaleString('pt-BR',{month:'long',year:'numeric'}),
+          income:0, expenses:0, balance:0
+        });
         dt = new Date(dt.getFullYear(), dt.getMonth()+1);
       }
     }
@@ -186,7 +210,7 @@
       historyBalance.textContent  = 'Saldo: ' + formatMoney(d.balance);
     });
 
-    // helpers de storage/ logs
+    // helpers de storage/local e logs
     const periodKey = () => `finance_${yearSelect.value}_${monthSelect.value}`;
     const logKey    = () => periodKey() + '_logs';
 
@@ -195,16 +219,17 @@
     const renderLogs = () => {
       const logs = loadLogs();
       actionList.innerHTML = logs.length
-        ? logs.map(l=>`<li>[${l.time}] ${l.text}</li>`).join('')
+        ? logs.map(l => `<li>[${l.time}] ${l.text}</li>`).join('')
         : '<li>—</li>';
     };
     const logAction = text => {
       const logs = loadLogs();
       logs.unshift({ time: new Date().toLocaleTimeString(), text });
-      saveLogs(logs); renderLogs();
+      saveLogs(logs);
+      renderLogs();
     };
 
-    /** fetch GET do Sheets */
+    /** Carrega dados do Google Sheets */
     async function loadState() {
       const periodo = `${yearSelect.value}_${monthSelect.value}`;
       const res     = await fetch(`${SHEET_URL}?action=load&periodo=${periodo}`);
@@ -215,7 +240,7 @@
       (data.expenses || []).forEach(e => addExpenseItem(e.desc, e.value, e.paid, false));
     }
 
-    /** fetch POST no Sheets */
+    /** Salva dados no Google Sheets */
     async function saveState() {
       const periodo = `${yearSelect.value}_${monthSelect.value}`;
       const incomes = Array.from(document.querySelectorAll('.income-item')).map(i => ({
@@ -234,27 +259,43 @@
       });
     }
 
-    // funções de UI (addIncomeItem, addExpenseItem, formatMoney, calculateTotals, updateHistoryData, updateSliderToSelected)
-    // — mantidas como antes, sem mudanças exceto que sempre chamam saveState() e logAction()
+    // funções de UI (igual à sua última versão):
+    // addIncomeItem, addExpenseItem, formatMoney, updateHistoryData, calculateTotals, updateSliderToSelected, populateYear, populateMonth
 
-    // listeners assincronos
+    // listeners usando async/await
     yearSelect.addEventListener('change', async () => {
-      populateMonth(); await loadState(); calculateTotals(); renderLogs(); updateSliderToSelected();
+      populateMonth();
+      await loadState();
+      calculateTotals();
+      renderLogs();
+      updateSliderToSelected();
     });
     monthSelect.addEventListener('change', async () => {
-      await loadState(); calculateTotals(); renderLogs(); updateSliderToSelected();
+      await loadState();
+      calculateTotals();
+      renderLogs();
+      updateSliderToSelected();
     });
     document.getElementById('addIncome').addEventListener('click', async () => {
-      addIncomeItem(); calculateTotals(); await saveState(); renderLogs();
+      addIncomeItem();
+      calculateTotals();
+      await saveState();
+      renderLogs();
     });
     document.getElementById('addExpense').addEventListener('click', async () => {
-      addExpenseItem(); calculateTotals(); await saveState(); renderLogs();
+      addExpenseItem();
+      calculateTotals();
+      await saveState();
+      renderLogs();
     });
 
-    // inicia
-    populateYear(); populateMonth();
-    loadState().then(()=>{
-      calculateTotals(); renderLogs(); updateSliderToSelected();
+    // inicialização
+    populateYear();
+    populateMonth();
+    loadState().then(() => {
+      calculateTotals();
+      renderLogs();
+      updateSliderToSelected();
     });
   });
   </script>
