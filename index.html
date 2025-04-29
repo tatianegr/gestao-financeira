@@ -1,370 +1,318 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão Financeira Pessoal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .positive-value {
-            color: #10B981;
-        }
-        
-        .negative-value {
-            color: #EF4444;
-        }
-        
-        .input-highlight {
-            transition: all 0.3s ease;
-        }
-        
-        .input-highlight:focus {
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-        }
-        
-        .pulse-animation {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestão Financeira Pessoal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .positive-value { color: #10B981; }
+    .negative-value { color: #EF4444; }
+    .input-highlight { transition: all 0.3s ease; }
+    .input-highlight:focus { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); }
+    .pulse-animation { animation: pulse 2s infinite; }
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
+      70%  { box-shadow: 0 0 0 10px rgba(16,185,129,0); }
+      100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+    }
+  </style>
 </head>
 <body class="bg-gray-50">
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
-        <!-- Cabeçalho -->
-        <header class="mb-10 text-center">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Gestão Financeira Mensal</h1>
-            <p class="text-gray-600">Controle suas receitas, despesas e saiba exatamente quanto irá sobrar no final do mês</p>
-            
-            <div class="mt-6 flex justify-center">
-                <div class="relative">
-                    <select id="monthSelect" class="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="1">Janeiro</option>
-                        <option value="2">Fevereiro</option>
-                        <option value="3">Março</option>
-                        <option value="4">Abril</option>
-                        <option value="5">Maio</option>
-                        <option value="6">Junho</option>
-                        <option value="7">Julho</option>
-                        <option value="8">Agosto</option>
-                        <option value="9">Setembro</option>
-                        <option value="10">Outubro</option>
-                        <option value="11">Novembro</option>
-                        <option value="12">Dezembro</option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                </div>
-                
-                <div class="relative ml-4">
-                    <select id="yearSelect" class="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="2023">2023</option>
-                        <option value="2024" selected>2024</option>
-                        <option value="2025">2025</option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                </div>
-            </div>
-        </header>
-        
-        <!-- Resumo Financeiro -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <!-- Receitas -->
-            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="text-gray-500 font-medium">Total a Receber</h3>
-                        <p id="totalIncome" class="text-3xl font-bold text-gray-800 mt-2">R$ 0,00</p>
-                    </div>
-                    <div class="bg-green-100 p-3 rounded-full text-green-600">
-                        <i class="fas fa-money-bill-wave text-xl"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Despesas -->
-            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-500">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="text-gray-500 font-medium">Total a Pagar</h3>
-                        <p id="totalExpenses" class="text-3xl font-bold text-gray-800 mt-2">R$ 0,00</p>
-                    </div>
-                    <div class="bg-red-100 p-3 rounded-full text-red-600">
-                        <i class="fas fa-receipt text-xl"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Saldo -->
-            <div id="balanceCard" class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="text-gray-500 font-medium">Saldo Final</h3>
-                        <p id="finalBalance" class="text-3xl font-bold mt-2">R$ 0,00</p>
-                    </div>
-                    <div class="bg-blue-100 p-3 rounded-full text-blue-600">
-                        <i class="fas fa-wallet text-xl"></i>
-                    </div>
-                </div>
-            </div>
+  <div class="container mx-auto px-4 py-8 max-w-4xl">
+
+    <!-- Cabeçalho -->
+    <header class="mb-10 text-center">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Gestão Financeira Mensal</h1>
+      <p class="text-gray-600">Controle suas receitas, despesas e saiba exatamente quanto irá sobrar no período</p>
+      <div class="mt-6 flex justify-center">
+        <div class="relative">
+          <select id="monthSelect" class="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="1">Janeiro</option>
+            <option value="2">Fevereiro</option>
+            <option value="3">Março</option>
+            <option value="4">Abril</option>
+            <option value="5">Maio</option>
+            <option value="6">Junho</option>
+            <option value="7">Julho</option>
+            <option value="8">Agosto</option>
+            <option value="9">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <i class="fas fa-chevron-down"></i>
+          </div>
         </div>
-        
-        <!-- Seção de Receitas -->
-        <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
-            <div class="bg-green-600 px-6 py-4">
-                <h2 class="text-xl font-bold text-white flex items-center">
-                    <i class="fas fa-money-bill-wave mr-3"></i>
-                    Receitas do Mês
-                </h2>
-            </div>
-            
-            <div class="p-6">
-                <div id="incomeItems" class="mb-6">
-                    <!-- Itens de receita serão adicionados aqui via JavaScript -->
-                    <div class="income-item flex items-center mb-4">
-                        <input type="text" placeholder="Descrição (ex: Salário)" class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight">
-                        <input type="number" placeholder="Valor (R$)" class="w-32 border-t border-b border-r border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight income-value">
-                        <button class="remove-income bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition duration-300">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <button id="addIncome" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg flex items-center transition duration-300">
-                    <i class="fas fa-plus mr-2"></i>
-                    Adicionar Receita
-                </button>
-            </div>
+        <div class="relative ml-4">
+          <select id="yearSelect" class="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025" selected>2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+            <option value="2028">2028</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <i class="fas fa-chevron-down"></i>
+          </div>
         </div>
-        
-        <!-- Seção de Despesas -->
-        <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
-            <div class="bg-red-600 px-6 py-4">
-                <h2 class="text-xl font-bold text-white flex items-center">
-                    <i class="fas fa-receipt mr-3"></i>
-                    Despesas do Mês
-                </h2>
-            </div>
-            
-            <div class="p-6">
-                <div id="expenseItems" class="mb-6">
-                    <!-- Itens de despesa serão adicionados aqui via JavaScript -->
-                    <div class="expense-item flex items-center mb-4">
-                        <input type="text" placeholder="Descrição (ex: Aluguel)" class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight">
-                        <input type="number" placeholder="Valor (R$)" class="w-32 border-t border-b border-r border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight expense-value">
-                        <button class="remove-expense bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition duration-300">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <button id="addExpense" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg flex items-center transition duration-300">
-                    <i class="fas fa-plus mr-2"></i>
-                    Adicionar Despesa
-                </button>
-            </div>
+      </div>
+    </header>
+
+    <!-- Resumo Financeiro -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <!-- Receitas -->
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="text-gray-500 font-medium">Total a Receber</h3>
+            <p id="totalIncome" class="text-3xl font-bold text-gray-800 mt-2">R$ 0,00</p>
+          </div>
+          <div class="bg-green-100 p-3 rounded-full text-green-600">
+            <i class="fas fa-money-bill-wave text-xl"></i>
+          </div>
         </div>
-        
-        <!-- Dicas Financeiras -->
-        <div class="bg-blue-50 rounded-xl p-6 mb-8 border border-blue-200">
-            <h3 class="text-lg font-bold text-blue-800 mb-4 flex items-center">
-                <i class="fas fa-lightbulb mr-2"></i>
-                Dica Financeira do Dia
-            </h3>
-            <p id="financeTip" class="text-blue-700">
-                "Registrar todas as suas receitas e despesas é o primeiro passo para ter controle sobre suas finanças pessoais."
-            </p>
+      </div>
+
+      <!-- Despesas -->
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-500">
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="text-gray-500 font-medium">Total a Pagar</h3>
+            <p id="totalExpenses" class="text-3xl font-bold text-gray-800 mt-2">R$ 0,00</p>
+          </div>
+          <div class="bg-red-100 p-3 rounded-full text-red-600">
+            <i class="fas fa-receipt text-xl"></i>
+          </div>
         </div>
-        
-        <!-- Exportar Dados -->
-        <div class="flex flex-col sm:flex-row justify-between items-center bg-white rounded-xl shadow-md p-6">
-            <div class="mb-4 sm:mb-0">
-                <h3 class="font-bold text-gray-800 mb-1">Exportar seus dados</h3>
-                <p class="text-gray-600 text-sm">Salve ou compartilhe sua planilha financeira</p>
-            </div>
-            <div class="flex space-x-3">
-                <button id="exportPDF" class="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded-lg flex items-center transition duration-300">
-                    <i class="fas fa-file-pdf mr-2"></i>
-                    PDF
-                </button>
-                <button id="exportExcel" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center transition duration-300">
-                    <i class="fas fa-file-excel mr-2"></i>
-                    Excel
-                </button>
-                <button id="print" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center transition duration-300">
-                    <i class="fas fa-print mr-2"></i>
-                    Imprimir
-                </button>
-            </div>
+      </div>
+
+      <!-- Saldo -->
+      <div id="balanceCard" class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="text-gray-500 font-medium">Saldo Final</h3>
+            <p id="finalBalance" class="text-3xl font-bold mt-2">R$ 0,00</p>
+          </div>
+          <div class="bg-blue-100 p-3 rounded-full text-blue-600">
+            <i class="fas fa-wallet text-xl"></i>
+          </div>
         </div>
+      </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Variáveis globais
-            let financeTips = [
-                "Registrar todas as suas receitas e despesas é o primeiro passo para ter controle sobre suas finanças pessoais.",
-                "Tente economizar pelo menos 20% da sua renda mensal para construir uma reserva de emergência.",
-                "Priorize o pagamento de dívidas com juros altos para reduzir seus gastos financeiros.",
-                "Analise seus gastos mensais e identifique onde você pode cortar despesas desnecessárias.",
-                "Estabeleça metas financeiras claras para manter o foco no seu planejamento."
-            ];
-            
-            // Selecionar dica aleatória
-            document.getElementById('financeTip').textContent = financeTips[Math.floor(Math.random() * financeTips.length)];
-            
-            // Adicionar nova receita
-            document.getElementById('addIncome').addEventListener('click', function() {
-                const incomeItems = document.getElementById('incomeItems');
-                const newIncomeItem = document.createElement('div');
-                newIncomeItem.className = 'income-item flex items-center mb-4';
-                newIncomeItem.innerHTML = `
-                    <input type="text" placeholder="Descrição (ex: Salário)" class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight">
-                    <input type="number" placeholder="Valor (R$)" class="w-32 border-t border-b border-r border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight income-value">
-                    <button class="remove-income bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition duration-300">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                `;
-                incomeItems.appendChild(newIncomeItem);
-                
-                // Adicionar evento para remover receita
-                newIncomeItem.querySelector('.remove-income').addEventListener('click', function() {
-                    incomeItems.removeChild(newIncomeItem);
-                    calculateTotals();
-                });
-                
-                // Adicionar evento para calcular ao mudar valor
-                newIncomeItem.querySelector('.income-value').addEventListener('input', calculateTotals);
-            });
-            
-            // Adicionar nova despesa
-            document.getElementById('addExpense').addEventListener('click', function() {
-                const expenseItems = document.getElementById('expenseItems');
-                const newExpenseItem = document.createElement('div');
-                newExpenseItem.className = 'expense-item flex items-center mb-4';
-                newExpenseItem.innerHTML = `
-                    <input type="text" placeholder="Descrição (ex: Aluguel)" class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight">
-                    <input type="number" placeholder="Valor (R$)" class="w-32 border-t border-b border-r border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight expense-value">
-                    <button class="remove-expense bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition duration-300">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                `;
-                expenseItems.appendChild(newExpenseItem);
-                
-                // Adicionar evento para remover despesa
-                newExpenseItem.querySelector('.remove-expense').addEventListener('click', function() {
-                    expenseItems.removeChild(newExpenseItem);
-                    calculateTotals();
-                });
-                
-                // Adicionar evento para calcular ao mudar valor
-                newExpenseItem.querySelector('.expense-value').addEventListener('input', calculateTotals);
-            });
-            
-            // Função para formatar valores monetários
-            function formatMoney(value) {
-                return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
-            }
-            
-            // Função para calcular totais
-            function calculateTotals() {
-                let totalIncome = 0;
-                let totalExpenses = 0;
-                
-                // Calcular total de receitas
-                document.querySelectorAll('.income-value').forEach(input => {
-                    const value = parseFloat(input.value) || 0;
-                    totalIncome += value;
-                });
-                
-                // Calcular total de despesas
-                document.querySelectorAll('.expense-value').forEach(input => {
-                    const value = parseFloat(input.value) || 0;
-                    totalExpenses += value;
-                });
-                
-                // Calcular saldo final
-                const finalBalance = totalIncome - totalExpenses;
-                
-                // Atualizar exibição dos valores
-                document.getElementById('totalIncome').textContent = formatMoney(totalIncome);
-                document.getElementById('totalExpenses').textContent = formatMoney(totalExpenses);
-                document.getElementById('finalBalance').textContent = formatMoney(finalBalance);
-                
-                // Alterar cor do saldo final conforme positivo/negativo
-                const balanceCard = document.getElementById('balanceCard');
-                const balanceText = document.getElementById('finalBalance');
-                
-                if (finalBalance >= 0) {
-                    balanceCard.classList.remove('border-l-red-500');
-                    balanceCard.classList.add('border-l-green-500');
-                    balanceText.classList.remove('negative-value');
-                    balanceText.classList.add('positive-value');
-                    
-                    // Adicionar animação se saldo positivo
-                    if (finalBalance > 0) {
-                        balanceCard.classList.add('pulse-animation');
-                    } else {
-                        balanceCard.classList.remove('pulse-animation');
-                    }
-                } else {
-                    balanceCard.classList.remove('border-l-green-500', 'pulse-animation');
-                    balanceCard.classList.add('border-l-red-500');
-                    balanceText.classList.remove('positive-value');
-                    balanceText.classList.add('negative-value');
-                }
-            }
-            
-            // Adicionar eventos para inputs existentes
-            document.querySelectorAll('.income-value, .expense-value').forEach(input => {
-                input.addEventListener('input', calculateTotals);
-            });
-            
-            // Adicionar eventos para botões de remoção existentes
-            document.querySelectorAll('.remove-income, .remove-expense').forEach(button => {
-                button.addEventListener('click', function() {
-                    const item = this.closest('.income-item, .expense-item');
-                    item.parentNode.removeChild(item);
-                    calculateTotals();
-                });
-            });
-            
-            // Funções de exportação (simuladas)
-            document.getElementById('exportPDF').addEventListener('click', function() {
-                alert('PDF gerado com sucesso! Esta é uma simulação. Em uma aplicação real, seria gerado um PDF com seus dados.');
-            });
-            
-            document.getElementById('exportExcel').addEventListener('click', function() {
-                alert('Planilha Excel gerada com sucesso! Esta é uma simulação. Em uma aplicação real, seria gerado um arquivo Excel com seus dados.');
-            });
-            
-            document.getElementById('print').addEventListener('click', function() {
-                window.print();
-            });
-            
-            // Calcular totais iniciais
-            calculateTotals();
+    <!-- Histórico Mensal -->
+    <div id="historySection" class="bg-white rounded-xl shadow-md p-6 mb-8">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">Histórico Mensal</h2>
+      <input
+        type="range"
+        id="historySlider"
+        min="0" max="0" value="0"
+        class="w-full mb-4"
+      >
+      <div class="text-center">
+        <p id="historyMonth" class="font-medium text-gray-700 mb-2"></p>
+        <p id="historyIncome" class="positive-value mb-1"></p>
+        <p id="historyExpenses" class="negative-value mb-1"></p>
+        <p id="historyBalance" class="font-bold mt-2"></p>
+      </div>
+    </div>
+
+    <!-- Seção de Receitas -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+      <div class="bg-green-600 px-6 py-4">
+        <h2 class="text-xl font-bold text-white flex items-center">
+          <i class="fas fa-money-bill-wave mr-3"></i>
+          Receitas do Mês
+        </h2>
+      </div>
+      <div class="p-6">
+        <div id="incomeItems" class="mb-6">
+          <div class="income-item flex items-center mb-4">
+            <input type="text" placeholder="Descrição (ex: Salário)" class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight">
+            <input type="number" placeholder="Valor (R$)" class="w-32 border-t border-b border-r border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight income-value">
+            <button class="remove-income bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition duration-300">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        <button id="addIncome" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg flex items-center transition duration-300">
+          <i class="fas fa-plus mr-2"></i> Adicionar Receita
+        </button>
+      </div>
+    </div>
+
+    <!-- Seção de Despesas -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+      <div class="bg-red-600 px-6 py-4">
+        <h2 class="text-xl font-bold text-white flex items-center">
+          <i class="fas fa-receipt mr-3"></i>
+          Despesas do Mês
+        </h2>
+      </div>
+      <div class="p-6">
+        <div id="expenseItems" class="mb-6">
+          <div class="expense-item flex items-center mb-4">
+            <input type="text" placeholder="Descrição (ex: Aluguel)" class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight">
+            <input type="number" placeholder="Valor (R$)" class="w-32 border-t border-b border-r border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight expense-value">
+            <button class="remove-expense bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition duration-300">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        <button id="addExpense" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg flex items-center transition duration-300">
+          <i class="fas fa-plus mr-2"></i> Adicionar Despesa
+        </button>
+      </div>
+    </div>
+
+  </div> <!-- container -->
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // referências
+    const monthSelect     = document.getElementById('monthSelect');
+    const yearSelect      = document.getElementById('yearSelect');
+    const historySlider   = document.getElementById('historySlider');
+    const historyMonth    = document.getElementById('historyMonth');
+    const historyIncome   = document.getElementById('historyIncome');
+    const historyExpenses = document.getElementById('historyExpenses');
+    const historyBalance  = document.getElementById('historyBalance');
+
+    // monta array de períodos de maio/2025 até +3 anos
+    const historyData = [];
+    {
+      let dt  = new Date(2025, 4); // mês 4 = maio
+      const end = new Date(dt.getFullYear() + 3, dt.getMonth());
+      while (dt <= end) {
+        historyData.push({
+          label:    dt.toLocaleString('pt-BR', { month:'long', year:'numeric' }),
+          income:   0,
+          expenses: 0,
+          balance:  0
         });
-    </script>
+        dt = new Date(dt.getFullYear(), dt.getMonth() + 1);
+      }
+    }
+    historySlider.min   = 0;
+    historySlider.max   = historyData.length - 1;
+    historySlider.value = 0;
+    historySlider.addEventListener('input', () => {
+      const data = historyData[+historySlider.value];
+      historyMonth   .textContent = data.label;
+      historyIncome  .textContent = 'Receitas: '  + formatMoney(data.income);
+      historyExpenses.textContent = 'Despesas: ' + formatMoney(data.expenses);
+      historyBalance .textContent = 'Saldo: '     + formatMoney(data.balance);
+    });
+
+    // add receitas
+    document.getElementById('addIncome').addEventListener('click', function() {
+      const incomeItems = document.getElementById('incomeItems');
+      const newItem = document.createElement('div');
+      newItem.className = 'income-item flex items-center mb-4';
+      newItem.innerHTML = `
+        <input type="text" placeholder="Descrição (ex: Salário)" class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight">
+        <input type="number" placeholder="Valor (R$)" class="w-32 border-t border-b border-r border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight income-value">
+        <button class="remove-income bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition duration-300">
+          <i class="fas fa-trash"></i>
+        </button>`;
+      incomeItems.appendChild(newItem);
+      newItem.querySelector('.remove-income').addEventListener('click', () => {
+        incomeItems.removeChild(newItem);
+        calculateTotals();
+      });
+      newItem.querySelector('.income-value').addEventListener('input', calculateTotals);
+    });
+
+    // add despesas
+    document.getElementById('addExpense').addEventListener('click', function() {
+      const expenseItems = document.getElementById('expenseItems');
+      const newItem = document.createElement('div');
+      newItem.className = 'expense-item flex items-center mb-4';
+      newItem.innerHTML = `
+        <input type="text" placeholder="Descrição (ex: Aluguel)" class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight">
+        <input type="number" placeholder="Valor (R$)" class="w-32 border-t border-b border-r border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight expense-value">
+        <button class="remove-expense bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition duration-300">
+          <i class="fas fa-trash"></i>
+        </button>`;
+      expenseItems.appendChild(newItem);
+      newItem.querySelector('.remove-expense').addEventListener('click', () => {
+        expenseItems.removeChild(newItem);
+        calculateTotals();
+      });
+      newItem.querySelector('.expense-value').addEventListener('input', calculateTotals);
+    });
+
+    // formata valor
+    function formatMoney(value) {
+      return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(value);
+    }
+
+    // atualiza histórico
+    function updateHistoryData(inc, exp) {
+      const label = new Date(
+        +yearSelect.value,
+        monthSelect.value - 1
+      ).toLocaleString('pt-BR',{month:'long',year:'numeric'});
+      const idx = historyData.findIndex(e => e.label === label);
+      if (idx >= 0) {
+        historyData[idx].income   = inc;
+        historyData[idx].expenses = exp;
+        historyData[idx].balance  = inc - exp;
+      }
+    }
+
+    // calcula totais
+    function calculateTotals() {
+      let totalIncome = 0, totalExpenses = 0;
+      document.querySelectorAll('.income-value').forEach(i => totalIncome += parseFloat(i.value)||0);
+      document.querySelectorAll('.expense-value').forEach(e => totalExpenses += parseFloat(e.value)||0);
+      const finalBalance = totalIncome - totalExpenses;
+
+      document.getElementById('totalIncome').textContent   = formatMoney(totalIncome);
+      document.getElementById('totalExpenses').textContent = formatMoney(totalExpenses);
+      document.getElementById('finalBalance').textContent  = formatMoney(finalBalance);
+
+      // cor e animação do saldo
+      const card = document.getElementById('balanceCard');
+      const txt  = document.getElementById('finalBalance');
+      if (finalBalance >= 0) {
+        card.classList.remove('border-l-red-500');
+        card.classList.add   ('border-l-green-500');
+        txt.classList.remove ('negative-value');
+        txt.classList.add    ('positive-value');
+        finalBalance>0
+          ? card.classList.add('pulse-animation')
+          : card.classList.remove('pulse-animation');
+      } else {
+        card.classList.remove('border-l-green-500','pulse-animation');
+        card.classList.add   ('border-l-red-500');
+        txt.classList.remove ('positive-value');
+      }
+
+      // atualiza histórico
+      updateHistoryData(totalIncome, totalExpenses);
+    }
+
+    // eventos iniciais
+    document.querySelectorAll('.income-value, .expense-value').forEach(i => i.addEventListener('input', calculateTotals));
+    document.querySelectorAll('.remove-income, .remove-expense').forEach(b => {
+      b.addEventListener('click', function() {
+        const item = this.closest('.income-item, .expense-item');
+        item.parentNode.removeChild(item);
+        calculateTotals();
+      });
+    });
+
+    // disparar cálculo inicial e histórico inicial
+    calculateTotals();
+    historySlider.dispatchEvent(new Event('input'));
+  });
+  </script>
 </body>
 </html>
