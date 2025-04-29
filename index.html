@@ -66,7 +66,6 @@
 
     <!-- Resumo Financeiro -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-      <!-- Receitas -->
       <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
         <div class="flex justify-between items-start">
           <div>
@@ -78,8 +77,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Despesas -->
       <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-500">
         <div class="flex justify-between items-start">
           <div>
@@ -91,8 +88,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Saldo -->
       <div id="balanceCard" class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
         <div class="flex justify-between items-start">
           <div>
@@ -109,12 +104,7 @@
     <!-- Histórico Mensal -->
     <div id="historySection" class="bg-white rounded-xl shadow-md p-6 mb-8">
       <h2 class="text-xl font-bold text-gray-800 mb-4">Histórico Mensal</h2>
-      <input
-        type="range"
-        id="historySlider"
-        min="0" max="0" value="0"
-        class="w-full mb-4"
-      >
+      <input type="range" id="historySlider" min="0" max="0" value="0" class="w-full mb-4">
       <div class="text-center">
         <p id="historyMonth" class="font-medium text-gray-700 mb-2"></p>
         <p id="historyIncome" class="positive-value mb-1"></p>
@@ -171,7 +161,7 @@
       </div>
     </div>
 
-  </div> <!-- container -->
+  </div><!-- /container -->
 
   <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -184,14 +174,14 @@
     const historyExpenses = document.getElementById('historyExpenses');
     const historyBalance  = document.getElementById('historyBalance');
 
-    // monta array de períodos de maio/2025 até +3 anos
+    // montar array de períodos de maio/2025 até +3 anos
     const historyData = [];
     {
-      let dt  = new Date(2025, 4); // mês 4 = maio
+      let dt  = new Date(2025, 4); // maio = 4
       const end = new Date(dt.getFullYear() + 3, dt.getMonth());
       while (dt <= end) {
         historyData.push({
-          label:    dt.toLocaleString('pt-BR', { month:'long', year:'numeric' }),
+          label:    dt.toLocaleString('pt-BR',{month:'long',year:'numeric'}),
           income:   0,
           expenses: 0,
           balance:  0
@@ -203,21 +193,51 @@
     historySlider.max   = historyData.length - 1;
     historySlider.value = 0;
     historySlider.addEventListener('input', () => {
-      const data = historyData[+historySlider.value];
-      historyMonth   .textContent = data.label;
-      historyIncome  .textContent = 'Receitas: '  + formatMoney(data.income);
-      historyExpenses.textContent = 'Despesas: ' + formatMoney(data.expenses);
-      historyBalance .textContent = 'Saldo: '     + formatMoney(data.balance);
+      const d = historyData[+historySlider.value];
+      historyMonth   .textContent = d.label;
+      historyIncome  .textContent = 'Receitas: '  + formatMoney(d.income);
+      historyExpenses.textContent = 'Despesas: '  + formatMoney(d.expenses);
+      historyBalance .textContent = 'Saldo: '      + formatMoney(d.balance);
     });
 
-    // add receitas
-    document.getElementById('addIncome').addEventListener('click', function() {
+    // persistência
+    function saveState() {
+      const incomes = Array.from(document.querySelectorAll('.income-item')).map(item => ({
+        desc:  item.querySelector('input[type="text"]').value,
+        value: item.querySelector('.income-value').value
+      }));
+      const expenses = Array.from(document.querySelectorAll('.expense-item')).map(item => ({
+        desc:  item.querySelector('input[type="text"]').value,
+        value: item.querySelector('.expense-value').value
+      }));
+      const state = {
+        month:  monthSelect.value,
+        year:   yearSelect.value,
+        incomes,
+        expenses
+      };
+      localStorage.setItem('financeState', JSON.stringify(state));
+    }
+    function loadState() {
+      const raw = localStorage.getItem('financeState');
+      if (!raw) return;
+      const { month, year, incomes, expenses } = JSON.parse(raw);
+      monthSelect.value = month;
+      yearSelect.value  = year;
+      document.getElementById('incomeItems').innerHTML  = '';
+      document.getElementById('expenseItems').innerHTML = '';
+      incomes .forEach(i => addIncomeItem(i.desc, i.value));
+      expenses.forEach(e => addExpenseItem(e.desc, e.value));
+    }
+
+    // helpers de criação
+    function addIncomeItem(desc = '', val = '') {
       const incomeItems = document.getElementById('incomeItems');
       const newItem = document.createElement('div');
       newItem.className = 'income-item flex items-center mb-4';
       newItem.innerHTML = `
-        <input type="text" placeholder="Descrição (ex: Salário)" class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight">
-        <input type="number" placeholder="Valor (R$)" class="w-32 border-t border-b border-r border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight income-value">
+        <input type="text" value="${desc}" placeholder="Descrição (ex: Salário)" class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight">
+        <input type="number" value="${val}" placeholder="Valor (R$)" class="w-32 border-t border-b border-r border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight income-value">
         <button class="remove-income bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition duration-300">
           <i class="fas fa-trash"></i>
         </button>`;
@@ -225,18 +245,21 @@
       newItem.querySelector('.remove-income').addEventListener('click', () => {
         incomeItems.removeChild(newItem);
         calculateTotals();
+        saveState();
       });
-      newItem.querySelector('.income-value').addEventListener('input', calculateTotals);
-    });
-
-    // add despesas
-    document.getElementById('addExpense').addEventListener('click', function() {
+      newItem.querySelector('.income-value').addEventListener('input', () => {
+        calculateTotals();
+        saveState();
+      });
+      newItem.querySelector('input[type="text"]').addEventListener('input', saveState);
+    }
+    function addExpenseItem(desc = '', val = '') {
       const expenseItems = document.getElementById('expenseItems');
       const newItem = document.createElement('div');
       newItem.className = 'expense-item flex items-center mb-4';
       newItem.innerHTML = `
-        <input type="text" placeholder="Descrição (ex: Aluguel)" class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight">
-        <input type="number" placeholder="Valor (R$)" class="w-32 border-t border-b border-r border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight expense-value">
+        <input type="text" value="${desc}" placeholder="Descrição (ex: Aluguel)" class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight">
+        <input type="number" value="${val}" placeholder="Valor (R$)" class="w-32 border-t border-b border-r border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight expense-value">
         <button class="remove-expense bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition duration-300">
           <i class="fas fa-trash"></i>
         </button>`;
@@ -244,21 +267,22 @@
       newItem.querySelector('.remove-expense').addEventListener('click', () => {
         expenseItems.removeChild(newItem);
         calculateTotals();
+        saveState();
       });
-      newItem.querySelector('.expense-value').addEventListener('input', calculateTotals);
-    });
-
-    // formata valor
-    function formatMoney(value) {
-      return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(value);
+      newItem.querySelector('.expense-value').addEventListener('input', () => {
+        calculateTotals();
+        saveState();
+      });
+      newItem.querySelector('input[type="text"]').addEventListener('input', saveState);
     }
 
-    // atualiza histórico
+    // formatação e cálculo
+    function formatMoney(v) {
+      return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v);
+    }
     function updateHistoryData(inc, exp) {
-      const label = new Date(
-        +yearSelect.value,
-        monthSelect.value - 1
-      ).toLocaleString('pt-BR',{month:'long',year:'numeric'});
+      const label = new Date(+yearSelect.value, monthSelect.value - 1)
+        .toLocaleString('pt-BR',{month:'long',year:'numeric'});
       const idx = historyData.findIndex(e => e.label === label);
       if (idx >= 0) {
         historyData[idx].income   = inc;
@@ -266,50 +290,49 @@
         historyData[idx].balance  = inc - exp;
       }
     }
-
-    // calcula totais
     function calculateTotals() {
       let totalIncome = 0, totalExpenses = 0;
-      document.querySelectorAll('.income-value').forEach(i => totalIncome += parseFloat(i.value)||0);
+      document.querySelectorAll('.income-value').forEach(i => totalIncome   += parseFloat(i.value)||0);
       document.querySelectorAll('.expense-value').forEach(e => totalExpenses += parseFloat(e.value)||0);
       const finalBalance = totalIncome - totalExpenses;
-
-      document.getElementById('totalIncome').textContent   = formatMoney(totalIncome);
+      document.getElementById('totalIncome'  ).textContent = formatMoney(totalIncome);
       document.getElementById('totalExpenses').textContent = formatMoney(totalExpenses);
-      document.getElementById('finalBalance').textContent  = formatMoney(finalBalance);
+      document.getElementById('finalBalance' ).textContent = formatMoney(finalBalance);
 
-      // cor e animação do saldo
       const card = document.getElementById('balanceCard');
       const txt  = document.getElementById('finalBalance');
       if (finalBalance >= 0) {
         card.classList.remove('border-l-red-500');
         card.classList.add   ('border-l-green-500');
-        txt.classList.remove ('negative-value');
-        txt.classList.add    ('positive-value');
+        txt .classList.remove('negative-value');
+        txt .classList.add   ('positive-value');
         finalBalance>0
-          ? card.classList.add('pulse-animation')
+          ? card.classList.add   ('pulse-animation')
           : card.classList.remove('pulse-animation');
       } else {
         card.classList.remove('border-l-green-500','pulse-animation');
         card.classList.add   ('border-l-red-500');
-        txt.classList.remove ('positive-value');
+        txt .classList.remove('positive-value');
       }
 
-      // atualiza histórico
       updateHistoryData(totalIncome, totalExpenses);
+      saveState();
     }
 
-    // eventos iniciais
-    document.querySelectorAll('.income-value, .expense-value').forEach(i => i.addEventListener('input', calculateTotals));
-    document.querySelectorAll('.remove-income, .remove-expense').forEach(b => {
-      b.addEventListener('click', function() {
-        const item = this.closest('.income-item, .expense-item');
-        item.parentNode.removeChild(item);
-        calculateTotals();
-      });
+    // botões de adicionar
+    document.getElementById('addIncome').addEventListener('click', () => {
+      addIncomeItem();
+      calculateTotals();
+      saveState();
+    });
+    document.getElementById('addExpense').addEventListener('click', () => {
+      addExpenseItem();
+      calculateTotals();
+      saveState();
     });
 
-    // disparar cálculo inicial e histórico inicial
+    // load inicial
+    loadState();
     calculateTotals();
     historySlider.dispatchEvent(new Event('input'));
   });
