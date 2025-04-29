@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestão Financeira Pessoal</title>
   <script>
+    // ativa dark mode via class no html
     tailwind.config = { darkMode: 'class' }
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     body { font-family: 'Inter', sans-serif; }
@@ -28,25 +30,36 @@
   <div class="container mx-auto px-4 py-8 max-w-4xl">
     <!-- Cabeçalho -->
     <header class="mb-10 text-center">
-      <h1 class="text-3xl md:text-4xl font-bold mb-2 dark:text-white">Gestão Financeira Mensal</h1>
-      <p class="text-gray-600 dark:text-gray-400 mb-4">Escolha o mês/ano e controle receitas, despesas, saldo e histórico de ações</p>
+      <h1 class="text-3xl md:text-4xl font-bold mb-2 dark:text-white">
+        Gestão Financeira Mensal
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400 mb-4">
+        Escolha o mês/ano e controle receitas, despesas, saldo e histórico de ações
+      </p>
       <div class="mt-6 flex justify-center items-center space-x-4">
         <!-- Ano -->
         <div class="relative">
-          <select id="yearSelect" class="appearance-none bg-white dark:bg-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+          <select id="yearSelect"
+            class="appearance-none bg-white dark:bg-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </select>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
             <i class="fas fa-chevron-down"></i>
           </div>
         </div>
         <!-- Mês -->
         <div class="relative">
-          <select id="monthSelect" class="appearance-none bg-white dark:bg-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+          <select id="monthSelect"
+            class="appearance-none bg-white dark:bg-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </select>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
             <i class="fas fa-chevron-down"></i>
           </div>
         </div>
         <!-- Botão Histórico -->
-        <button id="toggleHistory" class="bg-blue-500 dark:bg-blue-700 hover:bg-blue-600 dark:hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center transition">
+        <button id="toggleHistory"
+          class="bg-blue-500 dark:bg-blue-700 hover:bg-blue-600 dark:hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center transition">
           <i class="fas fa-history mr-2"></i>Histórico
         </button>
       </div>
@@ -54,26 +67,35 @@
 
     <!-- Resumo Financeiro -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border-l-4 border-green-500">
+      <div
+        class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border-l-4 border-green-500">
         <h3 class="text-gray-500 dark:text-gray-400 font-medium">Total a Receber</h3>
-        <p id="totalIncome" class="text-3xl font-bold dark:text-white mt-2">R$ 0,00</p>
+        <p id="totalIncome"
+          class="text-3xl font-bold dark:text-white mt-2">R$ 0,00</p>
       </div>
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border-l-4 border-red-500">
+      <div
+        class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border-l-4 border-red-500">
         <h3 class="text-gray-500 dark:text-gray-400 font-medium">Total a Pagar</h3>
-        <p id="totalExpenses" class="text-3xl font-bold dark:text-white mt-2">R$ 0,00</p>
+        <p id="totalExpenses"
+          class="text-3xl font-bold dark:text-white mt-2">R$ 0,00</p>
       </div>
-      <div id="balanceCard" class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border-l-4 border-blue-500">
+      <div id="balanceCard"
+        class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border-l-4 border-blue-500">
         <h3 class="text-gray-500 dark:text-gray-400 font-medium">Saldo Final</h3>
-        <p id="finalBalance" class="text-3xl font-bold dark:text-white mt-2">R$ 0,00</p>
+        <p id="finalBalance"
+          class="text-3xl font-bold dark:text-white mt-2">R$ 0,00</p>
       </div>
     </div>
 
     <!-- Histórico Mensal -->
-    <div id="historySection" class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
+    <div id="historySection"
+      class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
       <h2 class="text-xl font-bold dark:text-gray-200 mb-4">Histórico Mensal</h2>
-      <input type="range" id="historySlider" min="0" max="0" value="0" class="w-full mb-4">
+      <input type="range" id="historySlider" min="0" max="0" value="0"
+        class="w-full mb-4">
       <div class="text-center">
-        <p id="historyMonth" class="font-medium dark:text-gray-300 mb-2"></p>
+        <p id="historyMonth"
+          class="font-medium dark:text-gray-300 mb-2"></p>
         <p id="historyIncome" class="positive-value mb-1"></p>
         <p id="historyExpenses" class="negative-value mb-1"></p>
         <p id="historyBalance" class="font-bold mt-2"></p>
@@ -81,52 +103,63 @@
     </div>
 
     <!-- Receitas -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-8">
+    <div
+      class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-8">
       <div class="bg-green-600 dark:bg-green-700 px-6 py-4">
         <h2 class="text-xl font-bold text-white flex items-center">
-          <i class="fas fa-money-bill-wave mr-3"></i> Receitas do Mês
+          <i class="fas fa-money-bill-wave mr-3"></i>Receitas do Mês
         </h2>
       </div>
       <div class="p-6 bg-gray-50 dark:bg-gray-900">
         <div id="incomeItems" class="mb-6"></div>
-        <button id="addIncome" class="bg-green-500 dark:bg-green-700 hover:bg-green-600 dark:hover:bg-green-600 text-white px-6 py-2 rounded-lg flex items-center transition">
+        <button id="addIncome"
+          class="bg-green-500 dark:bg-green-700 hover:bg-green-600 dark:hover:bg-green-600 text-white px-6 py-2 rounded-lg flex items-center transition">
           <i class="fas fa-plus mr-2"></i>Adicionar Receita
         </button>
       </div>
     </div>
 
     <!-- Despesas -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-8">
+    <div
+      class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-8">
       <div class="bg-red-600 dark:bg-red-700 px-6 py-4">
         <h2 class="text-xl font-bold text-white flex items-center">
-          <i class="fas fa-receipt mr-3"></i> Despesas do Mês
+          <i class="fas fa-receipt mr-3"></i>Despesas do Mês
         </h2>
       </div>
       <div class="p-6 bg-gray-50 dark:bg-gray-900">
         <div id="expenseItems" class="mb-6"></div>
-        <button id="addExpense" class="bg-red-500 dark:bg-red-700 hover:bg-red-600 dark:hover:bg-red-600 text-white px-6 py-2 rounded-lg flex items-center transition">
+        <button id="addExpense"
+          class="bg-red-500 dark:bg-red-700 hover:bg-red-600 dark:hover:bg-red-600 text-white px-6 py-2 rounded-lg flex items-center transition">
           <i class="fas fa-plus mr-2"></i>Adicionar Despesa
         </button>
       </div>
     </div>
 
     <!-- Status de Pagamentos -->
-    <div id="paymentStatus" class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
+    <div id="paymentStatus"
+      class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
       <h2 class="text-xl font-bold dark:text-gray-200 mb-4">Status de Pagamentos</h2>
-      <p class="font-medium dark:text-gray-200">Total Pago: <span id="totalPaid" class="positive-value">R$ 0,00</span></p>
-      <p class="font-medium dark:text-gray-200">Total a Pagar: <span id="totalUnpaid" class="negative-value">R$ 0,00</span></p>
+      <p class="font-medium dark:text-gray-200">Total Pago:
+        <span id="totalPaid" class="positive-value">R$ 0,00</span></p>
+      <p class="font-medium dark:text-gray-200">Total a Pagar:
+        <span id="totalUnpaid" class="negative-value">R$ 0,00</span></p>
       <div class="mt-4">
         <h3 class="font-medium dark:text-gray-200">Despesas Pagas</h3>
-        <ul id="paidList" class="list-disc list-inside mb-3"><li>—</li></ul>
+        <ul id="paidList"
+          class="list-disc list-inside mb-3"><li>—</li></ul>
         <h3 class="font-medium dark:text-gray-200">Despesas a Pagar</h3>
-        <ul id="unpaidList" class="list-disc list-inside"><li>—</li></ul>
+        <ul id="unpaidList"
+          class="list-disc list-inside"><li>—</li></ul>
       </div>
     </div>
 
-    <!-- Histórico de Ações (oculto inicialmente) -->
-    <div id="actionHistory" class="hidden bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
+    <!-- Histórico de Ações (oculto por padrão) -->
+    <div id="actionHistory"
+      class="hidden bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
       <h2 class="text-xl font-bold dark:text-gray-200 mb-4">Histórico de Ações</h2>
-      <ul id="actionList" class="list-disc list-inside text-sm text-gray-700 dark:text-gray-300 max-h-48 overflow-y-auto">
+      <ul id="actionList"
+        class="list-disc list-inside text-sm text-gray-700 dark:text-gray-300 max-h-48 overflow-y-auto">
         <li>—</li>
       </ul>
     </div>
@@ -134,18 +167,277 @@
 
   <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const toggleBtn    = document.getElementById('toggleHistory');
-    const actionDiv    = document.getElementById('actionHistory');
+    // referências de DOM
+    const yearSelect    = document.getElementById('yearSelect');
+    const monthSelect   = document.getElementById('monthSelect');
+    const historySlider = document.getElementById('historySlider');
+    const historyMonth  = document.getElementById('historyMonth');
+    const historyIncome = document.getElementById('historyIncome');
+    const historyExpenses = document.getElementById('historyExpenses');
+    const historyBalance  = document.getElementById('historyBalance');
+    const totalPaidEl     = document.getElementById('totalPaid');
+    const totalUnpaidEl   = document.getElementById('totalUnpaid');
+    const paidList        = document.getElementById('paidList');
+    const unpaidList      = document.getElementById('unpaidList');
+    const actionList      = document.getElementById('actionList');
+    const toggleBtn       = document.getElementById('toggleHistory');
+    const actionDiv       = document.getElementById('actionHistory');
 
-    // botão de Histórico: mostra/esconde
+    // toggle Histórico de Ações
     toggleBtn.addEventListener('click', () => {
       actionDiv.classList.toggle('hidden');
-      actionDiv.scrollIntoView({ behavior: 'smooth' });
+      if (!actionDiv.classList.contains('hidden')) {
+        actionDiv.scrollIntoView({ behavior: 'smooth' });
+      }
     });
 
-    // ...o restante do seu script (população, saveState, addIncomeItem etc) fica igual...
-    // apenas certifique-se de manter as funções logAction() e renderLogs(),
-    // para que actionList seja atualizado quando você chamar logAction().
+    // monta array de períodos maio/2025 → dez/2035
+    const historyData = [];
+    { let dt = new Date(2025,4), end = new Date(2035,11);
+      while (dt <= end) {
+        historyData.push({
+          label: dt.toLocaleString('pt-BR',{month:'long',year:'numeric'}),
+          income: 0, expenses: 0, balance: 0
+        });
+        dt = new Date(dt.getFullYear(), dt.getMonth()+1);
+      }
+    }
+    historySlider.min = 0;
+    historySlider.max = historyData.length - 1;
+    historySlider.value = 0;
+    historySlider.addEventListener('input', () => {
+      const d = historyData[+historySlider.value];
+      historyMonth.textContent    = d.label;
+      historyIncome.textContent   = 'Receitas: '  + formatMoney(d.income);
+      historyExpenses.textContent = 'Despesas: '  + formatMoney(d.expenses);
+      historyBalance.textContent  = 'Saldo: '      + formatMoney(d.balance);
+    });
+
+    // chaves de storage
+    function periodKey() { return `finance_${yearSelect.value}_${monthSelect.value}`; }
+    function logKey()    { return periodKey() + '_logs'; }
+
+    // funções de log
+    function loadLogs() {
+      const raw = localStorage.getItem(logKey());
+      if (!raw) return [];
+      try { return JSON.parse(raw) } catch { return [] }
+    }
+    function saveLogs(logs) {
+      localStorage.setItem(logKey(), JSON.stringify(logs));
+    }
+    function logAction(text) {
+      const logs = loadLogs();
+      logs.unshift({ time: new Date().toLocaleTimeString(), text });
+      saveLogs(logs);
+      renderLogs();
+    }
+    function renderLogs() {
+      const logs = loadLogs();
+      if (!logs.length) {
+        actionList.innerHTML = '<li>—</li>';
+      } else {
+        actionList.innerHTML = logs.map(l =>
+          `<li>[${l.time}] ${l.text}</li>`
+        ).join('');
+      }
+    }
+
+    // salvar/carregar estado de lançamentos
+    function loadState() {
+      document.getElementById('incomeItems').innerHTML = '';
+      document.getElementById('expenseItems').innerHTML = '';
+      const raw = localStorage.getItem(periodKey());
+      if (!raw) return;
+      const { incomes, expenses } = JSON.parse(raw);
+      incomes.forEach(i => addIncomeItem(i.desc, i.value, false));
+      expenses.forEach(e => addExpenseItem(e.desc, e.value, e.paid, false));
+    }
+    function saveState() {
+      const incomes  = Array.from(document.querySelectorAll('.income-item')).map(i => ({
+        desc:  i.querySelector('input[type="text"]').value,
+        value: i.querySelector('.income-value').value
+      }));
+      const expenses = Array.from(document.querySelectorAll('.expense-item')).map(i => ({
+        desc:  i.querySelector('input[type="text"]').value,
+        value: i.querySelector('.expense-value').value,
+        paid:  i.querySelector('.expense-paid').checked
+      }));
+      localStorage.setItem(periodKey(), JSON.stringify({ incomes, expenses }));
+    }
+
+    // funções de UI
+    function addIncomeItem(desc='', val='', log=true) {
+      const c = document.getElementById('incomeItems');
+      const div = document.createElement('div');
+      div.className = 'income-item flex items-center mb-4';
+      div.innerHTML = `
+        <input type="text" value="${desc}" placeholder="Descrição (ex: Salário)"
+          class="flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700
+                 dark:text-gray-100 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2
+                 focus:ring-green-500 input-highlight">
+        <input type="number" value="${val}" placeholder="Valor (R$)"
+          class="w-32 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700
+                 dark:text-gray-100 px-4 py-2 focus:outline-none focus:ring-2
+                 focus:ring-green-500 input-highlight income-value">
+        <button class="remove-income bg-red-500 dark:bg-red-700 hover:bg-red-600
+                       dark:hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition">
+          <i class="fas fa-trash"></i>
+        </button>`;
+      c.appendChild(div);
+
+      const txt = div.querySelector('input[type="text"]');
+      const num = div.querySelector('.income-value');
+
+      div.querySelector('.remove-income').addEventListener('click', () => {
+        const d = txt.value || '–';
+        div.remove(); calculateTotals(); saveState();
+        log && logAction(`Receita removida: ${d}`);
+      });
+      num.addEventListener('input', () => {
+        calculateTotals(); saveState();
+        log && logAction(`Receita atualizada: ${formatMoney(parseFloat(num.value)||0)}`);
+      });
+      txt.addEventListener('input', saveState);
+
+      log && logAction(`Receita adicionada: ${desc} ${formatMoney(parseFloat(val)||0)}`);
+    }
+
+    function addExpenseItem(desc='', val='', paid=false, log=true) {
+      const c = document.getElementById('expenseItems');
+      const div = document.createElement('div');
+      div.className = 'expense-item flex items-center mb-4';
+      div.innerHTML = `
+        <input type="checkbox" class="expense-paid h-4 w-4 text-green-500 mr-2">
+        <input type="text" value="${desc}" placeholder="Descrição (ex: Aluguel)"
+          class="flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700
+                 dark:text-gray-100 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2
+                 focus:ring-red-500 input-highlight">
+        <input type="number" value="${val}" placeholder="Valor (R$)"
+          class="w-32 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700
+                 dark:text-gray-100 px-4 py-2 focus:outline-none focus:ring-2
+                 focus:ring-red-500 input-highlight expense-value">
+        <button class="remove-expense bg-red-500 dark:bg-red-700 hover:bg-red-600
+                       dark:hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition">
+          <i class="fas fa-trash"></i>
+        </button>`;
+      c.appendChild(div);
+
+      const chk = div.querySelector('.expense-paid');
+      const txt = div.querySelector('input[type="text"]');
+      const num = div.querySelector('.expense-value');
+      chk.checked = paid;
+
+      div.querySelector('.remove-expense').addEventListener('click', () => {
+        const d = txt.value||'–';
+        div.remove(); calculateTotals(); saveState();
+        log && logAction(`Despesa removida: ${d}`);
+      });
+      chk.addEventListener('change', () => {
+        calculateTotals(); saveState();
+        log && logAction(`Despesa ${chk.checked? 'marcada como paga':'desmarcada como paga'}: ${txt.value||'–'}`);
+      });
+      num.addEventListener('input', () => {
+        calculateTotals(); saveState();
+        log && logAction(`Valor da despesa atualizado para: ${formatMoney(parseFloat(num.value)||0)}`);
+      });
+      txt.addEventListener('input', saveState);
+
+      log && logAction(`Despesa adicionada: ${desc} ${formatMoney(parseFloat(val)||0)}`);
+    }
+
+    // cálculos gerais
+    function formatMoney(v) {
+      return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v);
+    }
+    function updateHistoryData(inc, exp) {
+      const lbl = new Date(+yearSelect.value, monthSelect.value-1)
+        .toLocaleString('pt-BR',{month:'long',year:'numeric'});
+      const idx = historyData.findIndex(x => x.label === lbl);
+      if (idx >= 0) historyData[idx] = { label: lbl, income: inc, expenses: exp, balance: inc-exp };
+    }
+    function calculateTotals() {
+      let inc=0, exp=0;
+      document.querySelectorAll('.income-value').forEach(i => inc += parseFloat(i.value)||0);
+      document.querySelectorAll('.expense-value').forEach(e => exp += parseFloat(e.value)||0);
+      const bal = inc - exp;
+
+      document.getElementById('totalIncome').textContent   = formatMoney(inc);
+      document.getElementById('totalExpenses').textContent = formatMoney(exp);
+      document.getElementById('finalBalance').textContent  = formatMoney(bal);
+
+      const card = document.getElementById('balanceCard');
+      const txt  = document.getElementById('finalBalance');
+      if (bal >= 0) {
+        card.classList.replace('border-l-red-500','border-l-green-500');
+        txt.classList.replace('negative-value','positive-value');
+        bal>0 ? card.classList.add('pulse-animation') : card.classList.remove('pulse-animation');
+      } else {
+        card.classList.replace('border-l-green-500','border-l-red-500');
+        txt.classList.replace('positive-value','negative-value');
+      }
+
+      // status de pagamentos
+      let paidSum=0, unpaidSum=0, paidArr=[], unpaidArr=[];
+      document.querySelectorAll('.expense-item').forEach(div => {
+        const v = parseFloat(div.querySelector('.expense-value').value)||0;
+        const d = div.querySelector('input[type="text"]').value||'–';
+        if (div.querySelector('.expense-paid').checked) {
+          paidSum+=v; paidArr.push(d);
+        } else {
+          unpaidSum+=v; unpaidArr.push(d);
+        }
+      });
+      totalPaidEl.textContent   = formatMoney(paidSum);
+      totalUnpaidEl.textContent = formatMoney(unpaidSum);
+      paidList.innerHTML   = paidArr.length? paidArr.map(x=>`<li>${x}</li>`).join('')   : '<li>—</li>';
+      unpaidList.innerHTML = unpaidArr.length? unpaidArr.map(x=>`<li>${x}</li>`).join('') : '<li>—</li>';
+
+      updateHistoryData(inc, exp);
+      historySlider.dispatchEvent(new Event('input'));
+    }
+
+    // troca de período
+    function handlePeriodChange() {
+      logAction(`Período alterado para ${monthSelect.value}/${yearSelect.value}`);
+      populateMonth(); loadState(); calculateTotals(); renderLogs();
+    }
+
+    // popula selects
+    function populateYear() {
+      yearSelect.innerHTML = '';
+      for (let y = 2025; y <= 2035; y++) {
+        const o = document.createElement('option');
+        o.value = y; o.text = y;
+        yearSelect.appendChild(o);
+      }
+    }
+    function populateMonth() {
+      monthSelect.innerHTML = '';
+      const names = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho',
+                     'Agosto','Setembro','Outubro','Novembro','Dezembro'];
+      const start = +yearSelect.value === 2025 ? 4 : 0;
+      for (let m = start; m < 12; m++) {
+        const o = document.createElement('option');
+        o.value = m+1; o.text = names[m];
+        monthSelect.appendChild(o);
+      }
+    }
+
+    // listeners
+    yearSelect.addEventListener('change', handlePeriodChange);
+    monthSelect.addEventListener('change', handlePeriodChange);
+    document.getElementById('addIncome')
+      .addEventListener('click', ()=>{ addIncomeItem(); calculateTotals(); saveState(); renderLogs(); });
+    document.getElementById('addExpense')
+      .addEventListener('click', ()=>{ addExpenseItem(); calculateTotals(); saveState(); renderLogs(); });
+
+    // init
+    populateYear();
+    populateMonth();
+    loadState();
+    calculateTotals();
+    renderLogs();
   });
   </script>
 </body>
