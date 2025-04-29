@@ -12,7 +12,7 @@
     .positive-value { color: #10B981; }
     .negative-value { color: #EF4444; }
     .input-highlight { transition: all 0.3s ease; }
-    .input-highlight:focus { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); }
+    .input-highlight:focus { box-shadow: 0 0 0 3px rgba(59,130,246,0.3); }
     .pulse-animation { animation: pulse 2s infinite; }
     @keyframes pulse {
       0%   { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
@@ -27,8 +27,9 @@
     <!-- Cabeçalho -->
     <header class="mb-10 text-center">
       <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Gestão Financeira Mensal</h1>
-      <p class="text-gray-600">Controle suas receitas, despesas e saiba exatamente quanto irá sobrar no período</p>
+      <p class="text-gray-600">Controle receitas, despesas e veja seu saldo atualizado</p>
       <div class="mt-6 flex justify-center">
+        <!-- mês -->
         <div class="relative">
           <select id="monthSelect" class="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="1">Janeiro</option>
@@ -48,6 +49,7 @@
             <i class="fas fa-chevron-down"></i>
           </div>
         </div>
+        <!-- ano -->
         <div class="relative ml-4">
           <select id="yearSelect" class="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="2023">2023</option>
@@ -67,7 +69,7 @@
     <!-- Resumo Financeiro -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
       <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
-        <div class="flex justify-between items-start">
+        <div class="flex justify-between">
           <div>
             <h3 class="text-gray-500 font-medium">Total a Receber</h3>
             <p id="totalIncome" class="text-3xl font-bold text-gray-800 mt-2">R$ 0,00</p>
@@ -78,7 +80,7 @@
         </div>
       </div>
       <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-500">
-        <div class="flex justify-between items-start">
+        <div class="flex justify-between">
           <div>
             <h3 class="text-gray-500 font-medium">Total a Pagar</h3>
             <p id="totalExpenses" class="text-3xl font-bold text-gray-800 mt-2">R$ 0,00</p>
@@ -89,7 +91,7 @@
         </div>
       </div>
       <div id="balanceCard" class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
-        <div class="flex justify-between items-start">
+        <div class="flex justify-between">
           <div>
             <h3 class="text-gray-500 font-medium">Saldo Final</h3>
             <p id="finalBalance" class="text-3xl font-bold mt-2">R$ 0,00</p>
@@ -102,7 +104,7 @@
     </div>
 
     <!-- Histórico Mensal -->
-    <div id="historySection" class="bg-white rounded-xl shadow-md p-6 mb-8">
+    <div id="historySection" class="bg-white rounded-xl shadow p-6 mb-8">
       <h2 class="text-xl font-bold text-gray-800 mb-4">Histórico Mensal</h2>
       <input type="range" id="historySlider" min="0" max="0" value="0" class="w-full mb-4">
       <div class="text-center">
@@ -113,51 +115,63 @@
       </div>
     </div>
 
-    <!-- Seção de Receitas -->
+    <!-- Receitas -->
     <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
       <div class="bg-green-600 px-6 py-4">
         <h2 class="text-xl font-bold text-white flex items-center">
-          <i class="fas fa-money-bill-wave mr-3"></i>
-          Receitas do Mês
+          <i class="fas fa-money-bill-wave mr-3"></i> Receitas do Mês
         </h2>
       </div>
       <div class="p-6">
         <div id="incomeItems" class="mb-6">
           <div class="income-item flex items-center mb-4">
             <input type="text" placeholder="Descrição (ex: Salário)" class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight">
-            <input type="number" placeholder="Valor (R$)" class="w-32 border-t border-b border-r border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight income-value">
-            <button class="remove-income bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition duration-300">
+            <input type="number" placeholder="Valor (R$)" class="w-32 border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight income-value">
+            <button class="remove-income bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition">
               <i class="fas fa-trash"></i>
             </button>
           </div>
         </div>
-        <button id="addIncome" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg flex items-center transition duration-300">
+        <button id="addIncome" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg flex items-center transition">
           <i class="fas fa-plus mr-2"></i> Adicionar Receita
         </button>
       </div>
     </div>
 
-    <!-- Seção de Despesas -->
+    <!-- Despesas -->
     <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
       <div class="bg-red-600 px-6 py-4">
         <h2 class="text-xl font-bold text-white flex items-center">
-          <i class="fas fa-receipt mr-3"></i>
-          Despesas do Mês
+          <i class="fas fa-receipt mr-3"></i> Despesas do Mês
         </h2>
       </div>
       <div class="p-6">
         <div id="expenseItems" class="mb-6">
           <div class="expense-item flex items-center mb-4">
+            <input type="checkbox" class="expense-paid h-4 w-4 text-green-500 mr-2">
             <input type="text" placeholder="Descrição (ex: Aluguel)" class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight">
-            <input type="number" placeholder="Valor (R$)" class="w-32 border-t border-b border-r border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight expense-value">
-            <button class="remove-expense bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition duration-300">
+            <input type="number" placeholder="Valor (R$)" class="w-32 border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight expense-value">
+            <button class="remove-expense bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition">
               <i class="fas fa-trash"></i>
             </button>
           </div>
         </div>
-        <button id="addExpense" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg flex items-center transition duration-300">
+        <button id="addExpense" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg flex items-center transition">
           <i class="fas fa-plus mr-2"></i> Adicionar Despesa
         </button>
+      </div>
+    </div>
+
+    <!-- Status de Pagamentos -->
+    <div id="paymentStatus" class="bg-white rounded-xl shadow-md p-6 mb-8">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">Status de Pagamentos</h2>
+      <p class="font-medium">Total Pago: <span id="totalPaid" class="positive-value">R$ 0,00</span></p>
+      <p class="font-medium">Total a Pagar: <span id="totalUnpaid" class="negative-value">R$ 0,00</span></p>
+      <div class="mt-4">
+        <h3 class="font-medium">Despesas Pagas</h3>
+        <ul id="paidList" class="list-disc list-inside mb-3"><li>—</li></ul>
+        <h3 class="font-medium">Despesas a Pagar</h3>
+        <ul id="unpaidList" class="list-disc list-inside"><li>—</li></ul>
       </div>
     </div>
 
@@ -165,7 +179,7 @@
 
   <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // referências
+    // referências DOM
     const monthSelect     = document.getElementById('monthSelect');
     const yearSelect      = document.getElementById('yearSelect');
     const historySlider   = document.getElementById('historySlider');
@@ -173,11 +187,15 @@
     const historyIncome   = document.getElementById('historyIncome');
     const historyExpenses = document.getElementById('historyExpenses');
     const historyBalance  = document.getElementById('historyBalance');
+    const totalPaidEl     = document.getElementById('totalPaid');
+    const totalUnpaidEl   = document.getElementById('totalUnpaid');
+    const paidList        = document.getElementById('paidList');
+    const unpaidList      = document.getElementById('unpaidList');
 
-    // montar array de períodos de maio/2025 até +3 anos
+    // monta array de períodos (maio/2025 até +3 anos)
     const historyData = [];
     {
-      let dt  = new Date(2025, 4); // maio = 4
+      let dt = new Date(2025, 4);
       const end = new Date(dt.getFullYear() + 3, dt.getMonth());
       while (dt <= end) {
         historyData.push({
@@ -194,13 +212,13 @@
     historySlider.value = 0;
     historySlider.addEventListener('input', () => {
       const d = historyData[+historySlider.value];
-      historyMonth   .textContent = d.label;
-      historyIncome  .textContent = 'Receitas: '  + formatMoney(d.income);
+      historyMonth.textContent    = d.label;
+      historyIncome.textContent   = 'Receitas: '  + formatMoney(d.income);
       historyExpenses.textContent = 'Despesas: '  + formatMoney(d.expenses);
-      historyBalance .textContent = 'Saldo: '      + formatMoney(d.balance);
+      historyBalance.textContent  = 'Saldo: '      + formatMoney(d.balance);
     });
 
-    // persistência
+    // persistence
     function saveState() {
       const incomes = Array.from(document.querySelectorAll('.income-item')).map(item => ({
         desc:  item.querySelector('input[type="text"]').value,
@@ -208,15 +226,15 @@
       }));
       const expenses = Array.from(document.querySelectorAll('.expense-item')).map(item => ({
         desc:  item.querySelector('input[type="text"]').value,
-        value: item.querySelector('.expense-value').value
+        value: item.querySelector('.expense-value').value,
+        paid:  item.querySelector('.expense-paid').checked
       }));
-      const state = {
-        month:  monthSelect.value,
-        year:   yearSelect.value,
+      localStorage.setItem('financeState', JSON.stringify({
+        month: monthSelect.value,
+        year:  yearSelect.value,
         incomes,
         expenses
-      };
-      localStorage.setItem('financeState', JSON.stringify(state));
+      }));
     }
     function loadState() {
       const raw = localStorage.getItem('financeState');
@@ -226,54 +244,49 @@
       yearSelect.value  = year;
       document.getElementById('incomeItems').innerHTML  = '';
       document.getElementById('expenseItems').innerHTML = '';
-      incomes .forEach(i => addIncomeItem(i.desc, i.value));
-      expenses.forEach(e => addExpenseItem(e.desc, e.value));
+      incomes.forEach(i  => addIncomeItem(i.desc, i.value));
+      expenses.forEach(e => addExpenseItem(e.desc, e.value, e.paid));
     }
 
-    // helpers de criação
+    // helpers de criação de itens
     function addIncomeItem(desc = '', val = '') {
-      const incomeItems = document.getElementById('incomeItems');
+      const container = document.getElementById('incomeItems');
       const newItem = document.createElement('div');
       newItem.className = 'income-item flex items-center mb-4';
       newItem.innerHTML = `
         <input type="text" value="${desc}" placeholder="Descrição (ex: Salário)" class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight">
-        <input type="number" value="${val}" placeholder="Valor (R$)" class="w-32 border-t border-b border-r border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight income-value">
-        <button class="remove-income bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition duration-300">
-          <i class="fas fa-trash"></i>
-        </button>`;
-      incomeItems.appendChild(newItem);
+        <input type="number" value="${val}" placeholder="Valor (R$)" class="w-32 border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 input-highlight income-value">
+        <button class="remove-income bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition"><i class="fas fa-trash"></i></button>`;
+      container.appendChild(newItem);
       newItem.querySelector('.remove-income').addEventListener('click', () => {
-        incomeItems.removeChild(newItem);
-        calculateTotals();
-        saveState();
+        container.removeChild(newItem); calculateTotals(); saveState();
       });
       newItem.querySelector('.income-value').addEventListener('input', () => {
-        calculateTotals();
-        saveState();
+        calculateTotals(); saveState();
       });
-      newItem.querySelector('input[type="text"]').addEventListener('input', saveState);
     }
-    function addExpenseItem(desc = '', val = '') {
-      const expenseItems = document.getElementById('expenseItems');
+
+    function addExpenseItem(desc = '', val = '', paid = false) {
+      const container = document.getElementById('expenseItems');
       const newItem = document.createElement('div');
       newItem.className = 'expense-item flex items-center mb-4';
       newItem.innerHTML = `
+        <input type="checkbox" class="expense-paid h-4 w-4 text-green-500 mr-2">
         <input type="text" value="${desc}" placeholder="Descrição (ex: Aluguel)" class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight">
-        <input type="number" value="${val}" placeholder="Valor (R$)" class="w-32 border-t border-b border-r border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight expense-value">
-        <button class="remove-expense bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition duration-300">
-          <i class="fas fa-trash"></i>
-        </button>`;
-      expenseItems.appendChild(newItem);
+        <input type="number" value="${val}" placeholder="Valor (R$)" class="w-32 border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 input-highlight expense-value">
+        <button class="remove-expense bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition"><i class="fas fa-trash"></i></button>`;
+      container.appendChild(newItem);
+      const chk   = newItem.querySelector('.expense-paid');
+      const txt   = newItem.querySelector('input[type="text"]');
+      const inp   = newItem.querySelector('.expense-value');
+      chk.checked = paid;
+      // listeners
       newItem.querySelector('.remove-expense').addEventListener('click', () => {
-        expenseItems.removeChild(newItem);
-        calculateTotals();
-        saveState();
+        container.removeChild(newItem); calculateTotals(); saveState();
       });
-      newItem.querySelector('.expense-value').addEventListener('input', () => {
-        calculateTotals();
-        saveState();
-      });
-      newItem.querySelector('input[type="text"]').addEventListener('input', saveState);
+      chk.addEventListener('change', () => { calculateTotals(); saveState(); });
+      inp.addEventListener('input', () => { calculateTotals(); saveState(); });
+      txt.addEventListener('input', saveState);
     }
 
     // formatação e cálculo
@@ -281,57 +294,68 @@
       return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v);
     }
     function updateHistoryData(inc, exp) {
-      const label = new Date(+yearSelect.value, monthSelect.value - 1)
+      const label = new Date(+yearSelect.value, monthSelect.value-1)
         .toLocaleString('pt-BR',{month:'long',year:'numeric'});
       const idx = historyData.findIndex(e => e.label === label);
-      if (idx >= 0) {
+      if (idx>=0) {
         historyData[idx].income   = inc;
         historyData[idx].expenses = exp;
-        historyData[idx].balance  = inc - exp;
+        historyData[idx].balance  = inc-exp;
       }
     }
     function calculateTotals() {
-      let totalIncome = 0, totalExpenses = 0;
-      document.querySelectorAll('.income-value').forEach(i => totalIncome   += parseFloat(i.value)||0);
-      document.querySelectorAll('.expense-value').forEach(e => totalExpenses += parseFloat(e.value)||0);
-      const finalBalance = totalIncome - totalExpenses;
-      document.getElementById('totalIncome'  ).textContent = formatMoney(totalIncome);
-      document.getElementById('totalExpenses').textContent = formatMoney(totalExpenses);
-      document.getElementById('finalBalance' ).textContent = formatMoney(finalBalance);
+      // receitas e despesas totais
+      let totalInc = 0, totalExp = 0;
+      document.querySelectorAll('.income-value').forEach(i  => totalInc += parseFloat(i.value)||0);
+      document.querySelectorAll('.expense-value').forEach(e => totalExp += parseFloat(e.value)||0);
 
-      const card = document.getElementById('balanceCard');
-      const txt  = document.getElementById('finalBalance');
-      if (finalBalance >= 0) {
+      // saldo
+      const finalBal = totalInc - totalExp;
+      document.getElementById('totalIncome'  ).textContent = formatMoney(totalInc);
+      document.getElementById('totalExpenses').textContent = formatMoney(totalExp);
+      document.getElementById('finalBalance' ).textContent = formatMoney(finalBal);
+
+      // card saldo
+      const card = document.getElementById('balanceCard'), txt = document.getElementById('finalBalance');
+      if (finalBal >= 0) {
         card.classList.remove('border-l-red-500');
-        card.classList.add   ('border-l-green-500');
-        txt .classList.remove('negative-value');
-        txt .classList.add   ('positive-value');
-        finalBalance>0
-          ? card.classList.add   ('pulse-animation')
-          : card.classList.remove('pulse-animation');
+        card.classList.add('border-l-green-500');
+        txt.classList.remove('negative-value');
+        txt.classList.add('positive-value');
+        finalBal>0 ? card.classList.add('pulse-animation') : card.classList.remove('pulse-animation');
       } else {
         card.classList.remove('border-l-green-500','pulse-animation');
-        card.classList.add   ('border-l-red-500');
-        txt .classList.remove('positive-value');
+        card.classList.add('border-l-red-500');
+        txt.classList.remove('positive-value');
       }
 
-      updateHistoryData(totalIncome, totalExpenses);
+      // status de pagamentos
+      let paidSum=0, unpaidSum=0;
+      const paidDescs = [], unpaidDescs = [];
+      document.querySelectorAll('.expense-item').forEach(item => {
+        const val   = parseFloat(item.querySelector('.expense-value').value)||0;
+        const desc  = item.querySelector('input[type="text"]').value || '—';
+        const isPaid= item.querySelector('.expense-paid').checked;
+        if (isPaid) { paidSum += val; paidDescs.push(desc); }
+        else        { unpaidSum += val; unpaidDescs.push(desc); }
+      });
+      totalPaidEl.textContent   = formatMoney(paidSum);
+      totalUnpaidEl.textContent = formatMoney(unpaidSum);
+      paidList.innerHTML   = paidDescs.length   ? paidDescs.map(d => `<li>${d}</li>`).join('')   : '<li>—</li>';
+      unpaidList.innerHTML = unpaidDescs.length ? unpaidDescs.map(d => `<li>${d}</li>`).join('') : '<li>—</li>';
+
+      // histórico
+      updateHistoryData(totalInc, totalExp);
+
+      // persistência
       saveState();
     }
 
-    // botões de adicionar
-    document.getElementById('addIncome').addEventListener('click', () => {
-      addIncomeItem();
-      calculateTotals();
-      saveState();
-    });
-    document.getElementById('addExpense').addEventListener('click', () => {
-      addExpenseItem();
-      calculateTotals();
-      saveState();
-    });
+    // add buttons
+    document.getElementById('addIncome').addEventListener('click', () => { addIncomeItem(); calculateTotals(); saveState(); });
+    document.getElementById('addExpense').addEventListener('click', () => { addExpenseItem(); calculateTotals(); saveState(); });
 
-    // load inicial
+    // inicialização
     loadState();
     calculateTotals();
     historySlider.dispatchEvent(new Event('input'));
