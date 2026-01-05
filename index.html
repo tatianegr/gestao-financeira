@@ -412,6 +412,31 @@
       }
     }
 
+    // ✅ NOVO: define o mês/ano padrão como o atual
+    function setDefaultToCurrentMonth() {
+      const now = new Date();
+      let y = now.getFullYear();
+      let m = now.getMonth() + 1; // 1-12
+
+      // limita ao intervalo do app (2025–2035)
+      if (y < 2025) y = 2025;
+      if (y > 2035) y = 2035;
+
+      // seleciona o ano e popula meses conforme regra (2025 começa em maio)
+      yearSelect.value = String(y);
+      populateMonth();
+
+      // se for 2025 e o mês atual for antes de maio, cai em maio
+      if (y === 2025 && m < 5) m = 5;
+
+      // se por algum motivo mês não existir (ex.: ano 2025 e mês 1-4), garante fallback
+      if (![...monthSelect.options].some(o => o.value === String(m))) {
+        m = +monthSelect.options[0].value; // primeiro mês disponível
+      }
+
+      monthSelect.value = String(m);
+    }
+
     // Listeners de troca de período
     yearSelect.addEventListener('change', () => {
       populateMonth();
@@ -433,9 +458,9 @@
     document.getElementById('addExpense')
       .addEventListener('click', () => { addExpenseItem(); calculateTotals(); saveState(); renderLogs(); });
 
-    // Inicialização
+    // Inicialização (agora abre no mês atual)
     populateYear();
-    populateMonth();
+    setDefaultToCurrentMonth();
     loadState();
     calculateTotals();
     renderLogs();
