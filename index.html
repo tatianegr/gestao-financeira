@@ -27,13 +27,12 @@
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
   <div class="container mx-auto px-4 py-8 max-w-4xl">
 
-    <!-- Cabeçalho -->
     <header class="mb-10 text-center">
       <h1 class="text-3xl md:text-4xl font-bold mb-2 dark:text-white">
         Gestão Financeira Mensal
       </h1>
       <p class="text-gray-600 dark:text-gray-400 mb-4">
-        Escolha o mês/ano e controle receitas, despesas, saldo e histórico
+        Escolha o mês/ano e controle receitas, despesas, gastos fixos, saldo e histórico
       </p>
       <div class="mt-6 flex justify-center items-center space-x-4">
         <div class="relative">
@@ -59,7 +58,6 @@
       </div>
     </header>
 
-    <!-- Resumo Financeiro -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border-l-4 border-green-500">
         <h3 class="text-gray-500 dark:text-gray-400 font-medium">Total a Receber</h3>
@@ -75,7 +73,6 @@
       </div>
     </div>
 
-    <!-- Histórico Mensal -->
     <div id="historySection" class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
       <h2 class="text-xl font-bold dark:text-gray-200 mb-4">Histórico Mensal</h2>
       <input type="range" id="historySlider" min="0" max="0" value="0" class="w-full mb-4"/>
@@ -87,7 +84,6 @@
       </div>
     </div>
 
-    <!-- Receitas -->
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-8">
       <div class="bg-green-600 dark:bg-green-700 px-6 py-4">
         <h2 class="text-xl font-bold text-white flex items-center">
@@ -103,7 +99,21 @@
       </div>
     </div>
 
-    <!-- Despesas -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-8">
+      <div class="bg-amber-600 dark:bg-amber-700 px-6 py-4">
+        <h2 class="text-xl font-bold text-white flex items-center">
+          <i class="fas fa-thumbtack mr-3"></i>Gastos Fixos
+        </h2>
+      </div>
+      <div class="p-6 bg-gray-50 dark:bg-gray-900">
+        <div id="fixedExpenseItems" class="mb-6"></div>
+        <button id="addFixedExpense"
+          class="bg-amber-500 dark:bg-amber-700 hover:bg-amber-600 dark:hover:bg-amber-600 text-white px-6 py-2 rounded-lg flex items-center transition">
+          <i class="fas fa-plus mr-2"></i>Adicionar Gasto Fixo
+        </button>
+      </div>
+    </div>
+
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-8">
       <div class="bg-red-600 dark:bg-red-700 px-6 py-4">
         <h2 class="text-xl font-bold text-white flex items-center">
@@ -119,7 +129,6 @@
       </div>
     </div>
 
-    <!-- Status de Pagamentos -->
     <div id="paymentStatus" class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
       <h2 class="text-xl font-bold dark:text-gray-200 mb-4">Status de Pagamentos</h2>
       <p class="font-medium dark:text-gray-200">
@@ -136,7 +145,6 @@
       </div>
     </div>
 
-    <!-- Histórico de Ações -->
     <div id="actionHistory" class="hidden bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
       <h2 class="text-xl font-bold dark:text-gray-200 mb-4">Histórico de Ações</h2>
       <ul id="actionList"
@@ -148,28 +156,27 @@
 
   <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const yearSelect    = document.getElementById('yearSelect');
-    const monthSelect   = document.getElementById('monthSelect');
-    const historySlider = document.getElementById('historySlider');
-    const historyMonth  = document.getElementById('historyMonth');
-    const historyIncome = document.getElementById('historyIncome');
-    const historyExpenses = document.getElementById('historyExpenses');
-    const historyBalance  = document.getElementById('historyBalance');
-    const totalPaidEl     = document.getElementById('totalPaid');
-    const totalUnpaidEl   = document.getElementById('totalUnpaid');
-    const paidList        = document.getElementById('paidList');
-    const unpaidList      = document.getElementById('unpaidList');
-    const actionList      = document.getElementById('actionList');
-    const toggleBtn       = document.getElementById('toggleHistory');
-    const actionDiv       = document.getElementById('actionHistory');
+    const yearSelect       = document.getElementById('yearSelect');
+    const monthSelect      = document.getElementById('monthSelect');
+    const historySlider    = document.getElementById('historySlider');
+    const historyMonth     = document.getElementById('historyMonth');
+    const historyIncome    = document.getElementById('historyIncome');
+    const historyExpenses  = document.getElementById('historyExpenses');
+    const historyBalance   = document.getElementById('historyBalance');
+    const totalPaidEl      = document.getElementById('totalPaid');
+    const totalUnpaidEl    = document.getElementById('totalUnpaid');
+    const paidList         = document.getElementById('paidList');
+    const unpaidList       = document.getElementById('unpaidList');
+    const actionList       = document.getElementById('actionList');
+    const toggleBtn        = document.getElementById('toggleHistory');
+    const actionDiv        = document.getElementById('actionHistory');
+    const fixedExpenseItems= document.getElementById('fixedExpenseItems');
 
-    // Toggle histórico de ações
     toggleBtn.addEventListener('click', () => {
       actionDiv.classList.toggle('hidden');
       if (!actionDiv.classList.contains('hidden')) actionDiv.scrollIntoView({behavior:'smooth'});
     });
 
-    // Monta array de períodos
     const historyData = [];
     {
       let dt = new Date(2025,4), end = new Date(2035,11);
@@ -181,6 +188,7 @@
         dt = new Date(dt.getFullYear(), dt.getMonth()+1);
       }
     }
+
     historySlider.min = 0;
     historySlider.max = historyData.length - 1;
     historySlider.value = 0;
@@ -192,24 +200,26 @@
       historyBalance.textContent  = 'Saldo: '      + formatMoney(d.balance);
     });
 
-    // Storage keys
     const periodKey = () => `finance_${yearSelect.value}_${monthSelect.value}`;
     const logKey    = () => periodKey() + '_logs';
+    const fixedKey  = () => 'finance_fixed_expenses';
 
-    // Funções de log
     const loadLogs = () => {
       const raw = localStorage.getItem(logKey());
       return raw ? JSON.parse(raw) : [];
     };
+
     const saveLogs = logs => {
       localStorage.setItem(logKey(), JSON.stringify(logs));
     };
+
     const renderLogs = () => {
       const logs = loadLogs();
       actionList.innerHTML = logs.length
         ? logs.map(l => `<li>[${l.time}] ${l.text}</li>`).join('')
         : '<li>—</li>';
     };
+
     const logAction = text => {
       const logs = loadLogs();
       logs.unshift({ time: new Date().toLocaleTimeString(), text });
@@ -217,30 +227,56 @@
       renderLogs();
     };
 
-    // State persistence
+    const loadFixedExpenses = () => {
+      const raw = localStorage.getItem(fixedKey());
+      return raw ? JSON.parse(raw) : [];
+    };
+
+    const saveFixedExpenses = fixedExpenses => {
+      localStorage.setItem(fixedKey(), JSON.stringify(fixedExpenses));
+    };
+
     const loadState = () => {
       document.getElementById('incomeItems').innerHTML = '';
       document.getElementById('expenseItems').innerHTML = '';
+      fixedExpenseItems.innerHTML = '';
+
       const raw = localStorage.getItem(periodKey());
-      if (!raw) return;
-      const { incomes, expenses } = JSON.parse(raw);
-      incomes.forEach(i => addIncomeItem(i.desc, i.value, false));
-      expenses.forEach(e => addExpenseItem(e.desc, e.value, e.paid, false));
+      const periodData = raw ? JSON.parse(raw) : { incomes: [], expenses: [], fixedStatuses: {} };
+
+      const fixedExpenses = loadFixedExpenses();
+
+      periodData.incomes.forEach(i => addIncomeItem(i.desc, i.value, false));
+      periodData.expenses.forEach(e => addExpenseItem(e.desc, e.value, e.paid, false));
+
+      fixedExpenses.forEach((f, index) => {
+        const paid = periodData.fixedStatuses && periodData.fixedStatuses[index] ? true : false;
+        addFixedExpenseItem(f.desc, f.value, paid, index, false);
+      });
     };
+
     const saveState = () => {
       const incomes = Array.from(document.querySelectorAll('.income-item')).map(i => ({
         desc:  i.querySelector('input[type="text"]').value,
         value: i.querySelector('.income-value').value
       }));
+
       const expenses = Array.from(document.querySelectorAll('.expense-item')).map(i => ({
         desc:  i.querySelector('input[type="text"]').value,
         value: i.querySelector('.expense-value').value,
         paid:  i.querySelector('.expense-paid').checked
       }));
-      localStorage.setItem(periodKey(), JSON.stringify({ incomes, expenses }));
+
+      const fixedStatuses = {};
+      document.querySelectorAll('.fixed-expense-item').forEach(item => {
+        const index = item.dataset.fixedIndex;
+        const checked = item.querySelector('.fixed-expense-paid').checked;
+        fixedStatuses[index] = checked;
+      });
+
+      localStorage.setItem(periodKey(), JSON.stringify({ incomes, expenses, fixedStatuses }));
     };
 
-    // Adiciona receita
     function addIncomeItem(desc = '', val = '', log = true) {
       const c = document.getElementById('incomeItems');
       const div = document.createElement('div');
@@ -262,31 +298,38 @@
 
       const txt = div.querySelector('input[type="text"]');
       const num = div.querySelector('.income-value');
+
       const onEnter = e => {
         if (e.key === 'Enter') {
           e.preventDefault();
           addIncomeItem('', '', true);
-          calculateTotals(); saveState();
+          calculateTotals();
+          saveState();
         }
       };
+
       txt.addEventListener('keydown', onEnter);
       num.addEventListener('keydown', onEnter);
 
       div.querySelector('.remove-income').addEventListener('click', () => {
         const d = txt.value || '–';
-        div.remove(); calculateTotals(); saveState();
+        div.remove();
+        calculateTotals();
+        saveState();
         log && logAction(`Receita removida: ${d}`);
       });
+
       num.addEventListener('input', () => {
-        calculateTotals(); saveState();
+        calculateTotals();
+        saveState();
         log && logAction(`Receita atualizada: ${txt.value || '–'} — ${formatMoney(parseFloat(num.value)||0)}`);
       });
+
       txt.addEventListener('input', saveState);
 
       log && logAction(`Receita adicionada: ${desc||'–'} — ${formatMoney(parseFloat(val)||0)}`);
     }
 
-    // Adiciona despesa
     function addExpenseItem(desc = '', val = '', paid = false, log = true) {
       const c = document.getElementById('expenseItems');
       const div = document.createElement('div');
@@ -311,76 +354,238 @@
       const txt = div.querySelector('input[type="text"]');
       const num = div.querySelector('.expense-value');
       chk.checked = paid;
+
       const onEnter = e => {
         if (e.key === 'Enter') {
           e.preventDefault();
           addExpenseItem('', '', false, true);
-          calculateTotals(); saveState();
+          calculateTotals();
+          saveState();
         }
       };
+
       txt.addEventListener('keydown', onEnter);
       num.addEventListener('keydown', onEnter);
 
       div.querySelector('.remove-expense').addEventListener('click', () => {
         const d = txt.value || '–';
-        div.remove(); calculateTotals(); saveState();
+        div.remove();
+        calculateTotals();
+        saveState();
         log && logAction(`Despesa removida: ${d}`);
       });
+
       chk.addEventListener('change', () => {
-        calculateTotals(); saveState();
+        calculateTotals();
+        saveState();
         log && logAction(`Despesa ${chk.checked?'paga':'não paga'}: ${txt.value||'–'}`);
       });
+
       num.addEventListener('input', () => {
-        calculateTotals(); saveState();
+        calculateTotals();
+        saveState();
         log && logAction(`Despesa atualizada: ${txt.value||'–'} — ${formatMoney(parseFloat(num.value)||0)}`);
       });
+
       txt.addEventListener('input', saveState);
 
       log && logAction(`Despesa adicionada: ${desc||'–'} — ${formatMoney(parseFloat(val)||0)}`);
     }
 
-    // Formatação e cálculos
+    function addFixedExpenseItem(desc = '', val = '', paid = false, fixedIndex = null, log = true) {
+      const div = document.createElement('div');
+      div.className = 'fixed-expense-item flex items-center mb-4';
+      if (fixedIndex !== null) div.dataset.fixedIndex = fixedIndex;
+
+      div.innerHTML = `
+        <input type="checkbox" class="fixed-expense-paid h-4 w-4 text-green-500 mr-2">
+        <input type="text" value="${desc}" placeholder="Descrição (ex: Aluguel)"
+          class="fixed-expense-desc flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700
+                 dark:text-gray-100 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2
+                 focus:ring-amber-500 input-highlight">
+        <input type="number" value="${val}" placeholder="Valor (R$)"
+          class="fixed-expense-value w-32 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700
+                 dark:text-gray-100 px-4 py-2 focus:outline-none focus:ring-2
+                 focus:ring-amber-500 input-highlight">
+        <button class="remove-fixed-expense bg-red-500 dark:bg-red-700 hover:bg-red-600
+                       dark:hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition">
+          <i class="fas fa-trash"></i>
+        </button>`;
+      fixedExpenseItems.appendChild(div);
+
+      const chk = div.querySelector('.fixed-expense-paid');
+      const txt = div.querySelector('.fixed-expense-desc');
+      const num = div.querySelector('.fixed-expense-value');
+      chk.checked = paid;
+
+      const onEnter = e => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          createNewFixedExpense();
+        }
+      };
+
+      txt.addEventListener('keydown', onEnter);
+      num.addEventListener('keydown', onEnter);
+
+      chk.addEventListener('change', () => {
+        saveState();
+        calculateTotals();
+        log && logAction(`Gasto fixo ${chk.checked ? 'pago' : 'não pago'}: ${txt.value || '–'}`);
+      });
+
+      txt.addEventListener('input', () => {
+        if (div.dataset.fixedIndex !== undefined) {
+          updateFixedExpenseData(div.dataset.fixedIndex, txt.value, num.value);
+        }
+        saveState();
+        calculateTotals();
+      });
+
+      num.addEventListener('input', () => {
+        if (div.dataset.fixedIndex !== undefined) {
+          updateFixedExpenseData(div.dataset.fixedIndex, txt.value, num.value);
+        }
+        saveState();
+        calculateTotals();
+        log && logAction(`Gasto fixo atualizado: ${txt.value || '–'} — ${formatMoney(parseFloat(num.value)||0)}`);
+      });
+
+      div.querySelector('.remove-fixed-expense').addEventListener('click', () => {
+        const d = txt.value || '–';
+        removeFixedExpense(div.dataset.fixedIndex);
+        log && logAction(`Gasto fixo removido: ${d}`);
+      });
+
+      log && desc !== '' && logAction(`Gasto fixo adicionado: ${desc || '–'} — ${formatMoney(parseFloat(val)||0)}`);
+    }
+
+    function createNewFixedExpense() {
+      const fixedExpenses = loadFixedExpenses();
+      fixedExpenses.push({ desc: '', value: '' });
+      saveFixedExpenses(fixedExpenses);
+      loadState();
+      calculateTotals();
+    }
+
+    function updateFixedExpenseData(index, desc, value) {
+      const fixedExpenses = loadFixedExpenses();
+      if (fixedExpenses[index]) {
+        fixedExpenses[index].desc = desc;
+        fixedExpenses[index].value = value;
+        saveFixedExpenses(fixedExpenses);
+      }
+    }
+
+    function removeFixedExpense(index) {
+      const fixedExpenses = loadFixedExpenses();
+      fixedExpenses.splice(index, 1);
+      saveFixedExpenses(fixedExpenses);
+
+      const allPeriodKeys = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('finance_') && !key.endsWith('_logs') && key !== fixedKey()) {
+          allPeriodKeys.push(key);
+        }
+      }
+
+      allPeriodKeys.forEach(key => {
+        const data = JSON.parse(localStorage.getItem(key));
+        if (data && data.fixedStatuses) {
+          const newStatuses = {};
+          Object.keys(data.fixedStatuses).forEach(k => {
+            const oldIndex = parseInt(k, 10);
+            if (oldIndex < index) newStatuses[oldIndex] = data.fixedStatuses[k];
+            if (oldIndex > index) newStatuses[oldIndex - 1] = data.fixedStatuses[k];
+          });
+          data.fixedStatuses = newStatuses;
+          localStorage.setItem(key, JSON.stringify(data));
+        }
+      });
+
+      loadState();
+      calculateTotals();
+      saveState();
+      renderLogs();
+    }
+
     const formatMoney = v => new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v);
+
     function updateHistoryData(inc, exp) {
       const lbl = new Date(+yearSelect.value, monthSelect.value-1)
         .toLocaleString('pt-BR',{month:'long',year:'numeric'});
       const idx = historyData.findIndex(x => x.label === lbl);
       if (idx >= 0) historyData[idx] = { label: lbl, income: inc, expenses: exp, balance: inc-exp };
     }
+
     function calculateTotals() {
-      let inc=0, exp=0;
-      document.querySelectorAll('.income-value').forEach(i=>inc+=parseFloat(i.value)||0);
-      document.querySelectorAll('.expense-value').forEach(e=>exp+=parseFloat(e.value)||0);
-      const bal = inc-exp;
+      let inc = 0;
+      let exp = 0;
+
+      document.querySelectorAll('.income-value').forEach(i => inc += parseFloat(i.value)||0);
+      document.querySelectorAll('.expense-value').forEach(e => exp += parseFloat(e.value)||0);
+
+      document.querySelectorAll('.fixed-expense-item').forEach(item => {
+        exp += parseFloat(item.querySelector('.fixed-expense-value').value)||0;
+      });
+
+      const bal = inc - exp;
+
       document.getElementById('totalIncome').textContent   = formatMoney(inc);
       document.getElementById('totalExpenses').textContent = formatMoney(exp);
       document.getElementById('finalBalance').textContent  = formatMoney(bal);
-      const card=document.getElementById('balanceCard'), txt=document.getElementById('finalBalance');
-      if (bal>=0) {
+
+      const card = document.getElementById('balanceCard');
+      const txt  = document.getElementById('finalBalance');
+
+      if (bal >= 0) {
         card.classList.replace('border-l-red-500','border-l-green-500');
         txt.classList.replace('negative-value','positive-value');
-        bal>0?card.classList.add('pulse-animation'):card.classList.remove('pulse-animation');
+        bal > 0 ? card.classList.add('pulse-animation') : card.classList.remove('pulse-animation');
       } else {
         card.classList.replace('border-l-green-500','border-l-red-500');
         txt.classList.replace('positive-value','negative-value');
       }
-      // Atualiza lista de pagamentos
-      let paidSum=0, unpaidSum=0, paidArr=[], unpaidArr=[];
-      document.querySelectorAll('.expense-item').forEach(div=>{
-        const v=parseFloat(div.querySelector('.expense-value').value)||0;
-        const d=div.querySelector('input[type="text"]').value||'–';
-        if(div.querySelector('.expense-paid').checked){ paidSum+=v; paidArr.push(d); }
-        else { unpaidSum+=v; unpaidArr.push(d); }
+
+      let paidSum = 0;
+      let unpaidSum = 0;
+      let paidArr = [];
+      let unpaidArr = [];
+
+      document.querySelectorAll('.expense-item').forEach(div => {
+        const v = parseFloat(div.querySelector('.expense-value').value)||0;
+        const d = div.querySelector('input[type="text"]').value||'–';
+        if (div.querySelector('.expense-paid').checked) {
+          paidSum += v;
+          paidArr.push(`${d} (despesa)`);
+        } else {
+          unpaidSum += v;
+          unpaidArr.push(`${d} (despesa)`);
+        }
       });
+
+      document.querySelectorAll('.fixed-expense-item').forEach(div => {
+        const v = parseFloat(div.querySelector('.fixed-expense-value').value)||0;
+        const d = div.querySelector('.fixed-expense-desc').value||'–';
+        if (div.querySelector('.fixed-expense-paid').checked) {
+          paidSum += v;
+          paidArr.push(`${d} (fixo)`);
+        } else {
+          unpaidSum += v;
+          unpaidArr.push(`${d} (fixo)`);
+        }
+      });
+
       totalPaidEl.textContent   = formatMoney(paidSum);
       totalUnpaidEl.textContent = formatMoney(unpaidSum);
       paidList.innerHTML   = paidArr.length   ? paidArr.map(x=>`<li>${x}</li>`).join('')   : '<li>—</li>';
       unpaidList.innerHTML = unpaidArr.length ? unpaidArr.map(x=>`<li>${x}</li>`).join('') : '<li>—</li>';
+
       updateHistoryData(inc, exp);
       historySlider.dispatchEvent(new Event('input'));
     }
 
-    // Salta slider para período selecionado
     function updateSliderToSelected() {
       const label = new Date(+yearSelect.value, monthSelect.value - 1)
         .toLocaleString('pt-BR',{month:'long',year:'numeric'});
@@ -391,15 +596,16 @@
       }
     }
 
-    // Popula selects
     function populateYear() {
       yearSelect.innerHTML = '';
       for (let y = 2025; y <= 2035; y++) {
         const o = document.createElement('option');
-        o.value = y; o.text = y;
+        o.value = y;
+        o.text = y;
         yearSelect.appendChild(o);
       }
     }
+
     function populateMonth() {
       monthSelect.innerHTML = '';
       const names = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
@@ -407,37 +613,32 @@
       const start = +yearSelect.value === 2025 ? 4 : 0;
       for (let m = start; m < 12; m++) {
         const o = document.createElement('option');
-        o.value = m+1; o.text = names[m];
+        o.value = m+1;
+        o.text = names[m];
         monthSelect.appendChild(o);
       }
     }
 
-    // ✅ NOVO: define o mês/ano padrão como o atual
     function setDefaultToCurrentMonth() {
       const now = new Date();
       let y = now.getFullYear();
-      let m = now.getMonth() + 1; // 1-12
+      let m = now.getMonth() + 1;
 
-      // limita ao intervalo do app (2025–2035)
       if (y < 2025) y = 2025;
       if (y > 2035) y = 2035;
 
-      // seleciona o ano e popula meses conforme regra (2025 começa em maio)
       yearSelect.value = String(y);
       populateMonth();
 
-      // se for 2025 e o mês atual for antes de maio, cai em maio
       if (y === 2025 && m < 5) m = 5;
 
-      // se por algum motivo mês não existir (ex.: ano 2025 e mês 1-4), garante fallback
       if (![...monthSelect.options].some(o => o.value === String(m))) {
-        m = +monthSelect.options[0].value; // primeiro mês disponível
+        m = +monthSelect.options[0].value;
       }
 
       monthSelect.value = String(m);
     }
 
-    // Listeners de troca de período
     yearSelect.addEventListener('change', () => {
       populateMonth();
       loadState();
@@ -445,6 +646,7 @@
       renderLogs();
       updateSliderToSelected();
     });
+
     monthSelect.addEventListener('change', () => {
       loadState();
       calculateTotals();
@@ -452,13 +654,28 @@
       updateSliderToSelected();
     });
 
-    // Botões de adicionar
     document.getElementById('addIncome')
-      .addEventListener('click', () => { addIncomeItem(); calculateTotals(); saveState(); renderLogs(); });
-    document.getElementById('addExpense')
-      .addEventListener('click', () => { addExpenseItem(); calculateTotals(); saveState(); renderLogs(); });
+      .addEventListener('click', () => {
+        addIncomeItem();
+        calculateTotals();
+        saveState();
+        renderLogs();
+      });
 
-    // Inicialização (agora abre no mês atual)
+    document.getElementById('addExpense')
+      .addEventListener('click', () => {
+        addExpenseItem();
+        calculateTotals();
+        saveState();
+        renderLogs();
+      });
+
+    document.getElementById('addFixedExpense')
+      .addEventListener('click', () => {
+        createNewFixedExpense();
+        renderLogs();
+      });
+
     populateYear();
     setDefaultToCurrentMonth();
     loadState();
