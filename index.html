@@ -406,13 +406,11 @@
       if (fixedIndex !== null) div.dataset.fixedIndex = fixedIndex;
 
       const concludedBadge = concluded
-        ? `<span class="text-xs bg-orange-100 dark:bg-orange-900 text-orange-600 dark:text-orange-300 px-2 py-1 rounded mr-2 whitespace-nowrap">Última parcela</span>`
+        ? `<span style="font-size:.75rem;background:#fed7aa;color:#c2410c;padding:2px 8px;border-radius:4px;margin-right:6px;white-space:nowrap">Última parcela</span>`
         : '';
       const concludeTitle = concluded ? 'Reativar gasto fixo' : 'Concluir parcela (não aparece nos próximos meses)';
-      const concludeIcon = concluded ? 'fa-rotate-left' : 'fa-flag-checkered';
-      const concludeColor = concluded
-        ? 'bg-gray-400 dark:bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-500'
-        : 'bg-orange-500 dark:bg-orange-700 hover:bg-orange-600 dark:hover:bg-orange-600';
+      const concludeIcon = concluded ? 'fa-arrow-rotate-left' : 'fa-check';
+      const concludeBg = concluded ? '#9ca3af' : '#f97316';
 
       div.innerHTML = `
         <input type="checkbox" class="fixed-expense-paid h-4 w-4 text-green-500 mr-2">
@@ -425,7 +423,9 @@
                  dark:text-gray-100 px-4 py-2 focus:outline-none focus:ring-2
                  focus:ring-amber-500 input-highlight">
         ${concludedBadge}
-        <button class="conclude-fixed-expense ${concludeColor} text-white px-3 py-2 transition" title="${concludeTitle}">
+        <button class="conclude-fixed-expense" title="${concludeTitle}"
+          style="background:${concludeBg};color:#fff;padding:0.5rem 0.75rem;border:none;cursor:pointer;transition:opacity .2s"
+          onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
           <i class="fas ${concludeIcon}"></i>
         </button>
         <button class="remove-fixed-expense bg-red-500 dark:bg-red-700 hover:bg-red-600
