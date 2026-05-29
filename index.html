@@ -249,9 +249,17 @@
       periodData.incomes.forEach(i => addIncomeItem(i.desc, i.value, false));
       periodData.expenses.forEach(e => addExpenseItem(e.desc, e.value, e.paid, false));
 
+      const currentPeriodNum = +yearSelect.value * 12 + +monthSelect.value;
       fixedExpenses.forEach((f, index) => {
+        if (f.concludedAt) {
+          const concludedNum = f.concludedAt.year * 12 + f.concludedAt.month;
+          if (currentPeriodNum > concludedNum) return;
+        }
         const paid = periodData.fixedStatuses && periodData.fixedStatuses[index] ? true : false;
-        addFixedExpenseItem(f.desc, f.value, paid, index, false);
+        const concluded = f.concludedAt
+          ? (currentPeriodNum === f.concludedAt.year * 12 + f.concludedAt.month)
+          : false;
+        addFixedExpenseItem(f.desc, f.value, paid, index, false, concluded);
       });
     };
 
@@ -392,10 +400,19 @@
       log && logAction(`Despesa adicionada: ${desc||'–'} — ${formatMoney(parseFloat(val)||0)}`);
     }
 
-    function addFixedExpenseItem(desc = '', val = '', paid = false, fixedIndex = null, log = true) {
+    function addFixedExpenseItem(desc = '', val = '', paid = false, fixedIndex = null, log = true, concluded = false) {
       const div = document.createElement('div');
       div.className = 'fixed-expense-item flex items-center mb-4';
       if (fixedIndex !== null) div.dataset.fixedIndex = fixedIndex;
+
+      const concludedBadge = concluded
+        ? `<span class="text-xs bg-orange-100 dark:bg-orange-900 text-orange-600 dark:text-orange-300 px-2 py-1 rounded mr-2 whitespace-nowrap">Última parcela</span>`
+        : '';
+      const concludeTitle = concluded ? 'Reativar gasto fixo' : 'Concluir parcela (não aparece nos próximos meses)';
+      const concludeIcon = concluded ? 'fa-rotate-left' : 'fa-flag-checkered';
+      const concludeColor = concluded
+        ? 'bg-gray-400 dark:bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-500'
+        : 'bg-orange-500 dark:bg-orange-700 hover:bg-orange-600 dark:hover:bg-orange-600';
 
       div.innerHTML = `
         <input type="checkbox" class="fixed-expense-paid h-4 w-4 text-green-500 mr-2">
@@ -407,6 +424,10 @@
           class="fixed-expense-value w-32 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700
                  dark:text-gray-100 px-4 py-2 focus:outline-none focus:ring-2
                  focus:ring-amber-500 input-highlight">
+        ${concludedBadge}
+        <button class="conclude-fixed-expense ${concludeColor} text-white px-3 py-2 transition" title="${concludeTitle}">
+          <i class="fas ${concludeIcon}"></i>
+        </button>
         <button class="remove-fixed-expense bg-red-500 dark:bg-red-700 hover:bg-red-600
                        dark:hover:bg-red-600 text-white px-4 py-2 rounded-r-lg transition">
           <i class="fas fa-trash"></i>
@@ -449,6 +470,27 @@
         saveState();
         calculateTotals();
         log && logAction(`Gasto fixo atualizado: ${txt.value || '–'} — ${formatMoney(parseFloat(num.value)||0)}`);
+      });
+
+      div.querySelector('.conclude-fixed-expense').addEventListener('click', () => {
+        const idx = div.dataset.fixedIndex;
+        if (idx === undefined) return;
+        const fixedExpenses = loadFixedExpenses();
+        const expense = fixedExpenses[idx];
+        if (!expense) return;
+        if (expense.concludedAt) {
+          delete expense.concludedAt;
+          saveFixedExpenses(fixedExpenses);
+          log && logAction(`Gasto fixo reativado: ${expense.desc || '–'}`);
+        } else {
+          expense.concludedAt = { year: +yearSelect.value, month: +monthSelect.value };
+          saveFixedExpenses(fixedExpenses);
+          const monthName = new Date(+yearSelect.value, +monthSelect.value - 1)
+            .toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
+          log && logAction(`Gasto fixo concluído em ${monthName}: ${expense.desc || '–'}`);
+        }
+        loadState();
+        calculateTotals();
       });
 
       div.querySelector('.remove-fixed-expense').addEventListener('click', () => {
